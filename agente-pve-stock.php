@@ -3,9 +3,10 @@
 <?php
 
 //$DIRHOME="/usr/share/Alertas/";
-$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
+$DIRHOME = "D:/ProyectosVariosMipol/Mipol-Agentes/";
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
+include_once ($DIRHOME . "agente-pve-stock-plus.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
 require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
 require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
@@ -14,44 +15,22 @@ require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
 $ARCHIVOCSV = "mipol_ml.csv";
 $ARCHIVOXLS="Reorganizacion_Productos.xlsx";
-$MAILSISTEMA = "sistema@mipolrepuestos.com";
-$MAILTEST = "dretondo@mipolrepuestos.com";
-$MAILSAMMY = "sammy.moreno@microsolutions.cl";
-$MAILCC_PAEZ = "rpaez@mipolrepuestos.com";
-$MAILCC_RETONDO = "dretondo@mipolrepuestos.com";
-$MAILCC_TEK = "jtek@mipolrepuestos.com";
-$MAILSGO_MM = "mmarcucci@mipolrepuestos.com";
-$MAIL_RPOLICHE = "rpoliche@mipolrepuestos.com";
-$MAILJUJUY = "mipoljujuy@mipolrepuestos.com";
-$MAILCONCEPCION = "mipolconcep@mipolrepuestos.com";
-$MAILBRS = "mipolbrs@mipolrepuestos.com";
-$MAILLB = "mipol-labanda@mipolrepuestos.com";
-$MAILMENDONZA = "mipolmendoza@mipolrepuestos.com";
-$MAILJBJUSTO = "mipoljbjusto@mipolrepuestos.com";
-$MAILCATAMARCA = "jgrosso@grupo-autopartes.com.ar";
-$MAILSALTA = "ldiaz@grupo-autopartes.com.ar";
-$MAIL_GPOLICHE = "gpoliche@grupo-autopartes.com.ar";
-$MAILMORENO = "mmoreno@grupo-autopartes.com.ar";
-$MAIL_ESTELA = "evizcarra@mipolrepuestos.com";
-$MAILLP = "deposito-lospocitos@grupo-autopartes.com.ar";
-$MAIL_MMATIAS = "mmatias@grupo-autopartes.com.ar";
-$MAIL_HELGUERO = "chelguero@mipolrepuestos.com";
-$MAIL_EXPEDICION = "expedicion@grupo-autopartes.com.ar";
-$MAIL_LBARRAZA = "lbarraza@grupo-autopartes.com.ar";
-$MAIL_PPEREZ = "pperez@grupo-autopartes.com.ar";
-$MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
+
 $grupo_dep1 = "1,5,6,30,46";
 $grupo_dep2 = "2,7";
 $grupo_dep3 = "3,40";
 $grupo_dep4 = "8,36";
 $resuelto = false;
+$Stock_1 = 0;
+$Stock_2 = 0;
+$Stock_3 = 0;
 
 $i = 0;
 
 // Obetngo productos marcados para comprar en los pedidos de Vetntas de las Sucursales
 $Consulta_inicial = "SELECT * FROM detpve WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail IS NULL;";
 
-$mail->PluginDir = $DIRHOME . "phpmailer/";
+//$mail->PluginDir = $DIRHOME . "phpmailer/";
 
 $Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"StockSUC\",\"Fecha Ult Venta\"\r\n";
 
@@ -86,26 +65,29 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
 	r_dpt_prd.r_stock AS Reponer_Suc,
 	prd.prd_clasificacion AS Clasificacion,
-	(SELECT max(c.cpbvta_fecha) as fecha 
+	(SELECT max(c.cpbvta_fecha)
 	FROM cpbvta c 
 	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
-	INNER JOIN  prd on d.Prd_id = prd.prd_id
-	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND prd.prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc IN (".$grupo_dep1.") GROUP BY d.Prd_id) AS U_Venta
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
 	WHERE (
 	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
 	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
-	 ) 
+	) 
 	OR 
 	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
 	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
 	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
 	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
 
-	echo $ConsultaStock_Suc_Grupo1 . "\n";
+	//echo $ConsultaStock_Suc_Grupo1 . "\n";
 
 	$ConsultaStock_Suc_Grupo2 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
 	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
@@ -117,26 +99,29 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
 	r_dpt_prd.r_stock AS Reponer_Suc,
 	prd.prd_clasificacion AS Clasificacion,
-	(SELECT max(c.cpbvta_fecha) as fecha 
+	(SELECT max(c.cpbvta_fecha)
 	FROM cpbvta c 
 	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
-	INNER JOIN  prd on d.Prd_id = prd.prd_id
-	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND prd.prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc IN (".$grupo_dep2.") GROUP BY d.Prd_id) AS U_Venta
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
 	WHERE (
 	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 1*/
-	 ) 
+	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 2*/
+	) 
 	OR 
 	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 1*/
+	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 2*/
 	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
 	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
 
-	echo $ConsultaStock_Suc_Grupo2 . "\n";
+	// echo $ConsultaStock_Suc_Grupo2 . "\n";
 
 	$ConsultaStock_Suc_Grupo3 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
 	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
@@ -148,45 +133,73 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
 	r_dpt_prd.r_stock AS Reponer_Suc,
 	prd.prd_clasificacion AS Clasificacion,
-	(SELECT max(c.cpbvta_fecha) as fecha 
+	(SELECT max(c.cpbvta_fecha)
 	FROM cpbvta c 
 	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
-	INNER JOIN  prd on d.Prd_id = prd.prd_id
-	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND prd.prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc IN (".$grupo_dep3.") GROUP BY d.Prd_id) AS U_Venta
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
 	WHERE (
 	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 1*/
-	 ) 
+	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 3*/
+	) 
 	OR 
 	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 1*/
+	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 3*/
 	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
 	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
-
-	echo $ConsultaStock_Suc_Grupo3 . "\n";
-
+	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
+	
+	// echo $ConsultaStock_Suc_Grupo3 . "\n";
 
 	$Stock_grupo1 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo1 ); 
 	$Stock_grupo2 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo2 ); 
 	$Stock_grupo3 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo3 ); 
 
 	// Si existen productos en el grupo 1 que satisfaga el Stock necesitado 
+	$Stock_1 = 0;
+	$Stock_2 = 0;
+	$Stock_3 = 0;
+
+	$Sucs_g1 = "";
+	$Sucs_g2 = "";
+	$Sucs_g3 = "";
+
 	while ($stock_g1 = mysqli_fetch_array($Stock_grupo1)) 
 	{
 		if ($stock_g1['Stock_Total'] >= $art_pve['cantidad'] )
 		{
-			echo "Pido x mail a Suc " . $stock_g1['Suc']." el producto ".$stock_g1['prd_codalfa'].  " \n";
+			echo "Pido x mail a Suc " . $stock_g1['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g1['prd_codalfa'].", ID = ".$stock_g1['prd_id']. " \n";
+			echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
 			echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-			echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n";
+			echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 			$resuelto = true;
+			break;
 		}
 		else 
 		{
-			$resuelto = false;
+			$Stock_1 = $Stock_1 + $stock_g1['Stock_Total'];
+			$Sucs_g1 .= $Sucs_g1 . "," . $stock_g1['Suc'];
+
+			if ($Stock_1 >= $art_pve['cantidad'])
+			{
+				echo "Pido x mail a las Suc's " . $stock_g1['Suc']." el producto ".$stock_g1['prd_codalfa'].  " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g1 . "\n";
+				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				$resuelto = true;
+				break;
+			}
+			else {
+				$resuelto = false;
+			}
+			
 		}
 	}
 	if ($resuelto == false)
@@ -195,33 +208,73 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 		{
 			if ($stock_g2['Stock_Total'] >= $art_pve['cantidad']) 
 			{
-				echo "Pido x mail a Suc " . $stock_g2['suc']." el producto ".$stock_g2['prd_codalfa'].  " \n";
+				echo "Pido x mail a Suc " . $stock_g2['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g2['prd_codalfa'].", ID = ".$stock_g2['prd_id']. " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
 				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n";
+				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 				$resuelto = true;
+				break;
 			}
 			else 
 			{
+				$Stock_2 = $Stock_2 + $stock_g2['Stock_Total'];
+				$Sucs_g2 .= $Sucs_g2 . "," . $stock_g2['Suc'];
+
+				if ($Stock_2 >= $art_pve['cantidad'])
+				{
+					echo "Pido x mail a las Suc's " . $stock_g2['Suc']." el producto ".$stock_g2['prd_codalfa'].  " \n";
+					echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+					echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g2 . "\n";
+					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+					echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+					$resuelto = true;
+					break;
+				}
+				else 
+				{
 				$resuelto = false;
+				}
 			}	
 		}
 	}
 	if ($resuelto == false)
 	{
-		while ($stock_g3 = mysqli_fetch_array($Stock_grupo3)) 
+		while ($stock_g3 = mysqli_fetch_array($Stock_grupo2)) 
 		{
 			if ($stock_g3['Stock_Total'] >= $art_pve['cantidad']) 
 			{
-				echo "Pido x mail a Suc " . $stock_g3['suc']." el producto ".$stock_g3['prd_codalfa'].  " \n";
+				echo "Pido x mail a Suc " . $stock_g3['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g3['prd_codalfa'].", ID = ".$stock_g3['prd_id']. " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
 				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n";
+				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 				$resuelto = true;
+				break;
 			}
 			else 
 			{
+				$Stock_3 = $Stock_3 + $stock_g3['Stock_Total'];
+				$Sucs_g3 .= $Sucs_g3 . "," . $stock_g3['Suc'];
+
+				if ($Stock_3 >= $art_pve['cantidad'])
+				{
+					echo "Pido x mail a las Suc's " . $stock_g3['Suc']." el producto ".$stock_g3['prd_codalfa'].  " \n";
+					echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+					echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g3 . "\n";
+					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+					echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+					$resuelto = true;
+					break;
+				}
+				else 
+				{
 				$resuelto = false;
+				}
 			}	
 		}
+		echo "Pido a Proveedores, Envio mail a David x el producto ".$stock_g3['prd_codalfa'].  " \n";
+		echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+		echo "Marco Producto PVE en tabla detpve como enviado a Compras \n";
+		echo "Salgo del Ciclo Where, ya que el producto fue solicitado a Compras\n\n";
 	}
 
 }
