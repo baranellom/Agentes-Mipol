@@ -1,0 +1,24 @@
+#!/bin/bash
+DATE=`date +"%d%m%y-%H%M"`
+DB="fc"
+DIRDB="/var/lib/mysql/var"
+BCKDIR="/var/laya/backup"
+
+cd $BCKDIR
+echo -e "RESPALDO DE LA BASE DE DATOS"
+echo -e "============================"
+echo -e "Fecha y Hora de Inicio:\t`date +"%d/%m/%y %T"`"
+rm $BCKDIR/*.bz2
+rm $BCKDIR/*.tar
+echo -e "Estado: Borrado de Versiones anteriores Lista."
+echo -e "======================================"
+echo
+echo -e "Estado: Comenzando el Volcado de Datos..."
+mysqldump --databases $DB --opt --single-transaction --allow-keywords --max_allowed_packet=16M --quote-names --result-file=$BCKDIR/$DATE.sql
+echo -e "Estado: Comprimiendo archivo generado..."
+bzip2 $BCKDIR/$DATE.sql
+echo -e "Estado: Compresion lista."
+echo -e "=========================\n"
+echo
+echo -e "Fecha y Hora de Finalizacion:\t\t`date +"%d/%m/%y %T"`"
+echo -e "========================================================\n"
