@@ -3,15 +3,15 @@
 <?php
 
 //$DIRHOME="/usr/share/Alertas/";
-$DIRHOME = "D:/ProyectosVariosMipol/Mipol-Agentes/";
+$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
 include_once ($DIRHOME . "agente-pve-stock-plus.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
-require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
-require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
-require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
-require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
 $ARCHIVOCSV = "mipol_ml.csv";
 $ARCHIVOXLS="Reorganizacion_Productos.xlsx";
@@ -179,7 +179,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 			$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g1['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 			$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-			echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+			//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 			$resuelto = true;
 			break;
 		}
@@ -204,7 +204,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g1."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 				$resuelto = true;
 				break;
 			}
@@ -225,7 +225,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g2['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 				$resuelto = true;
 				break;
 			}
@@ -249,7 +249,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 					$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g2."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 					$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-					echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+					//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 					$resuelto = true;
 					break;
 				}
@@ -271,7 +271,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g3['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 				$resuelto = true;
 				break;
 			}
@@ -295,7 +295,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
 					$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g3."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 					$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-					echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+					//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
 					$resuelto = true;
 					break;
 				}
@@ -305,12 +305,12 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 				}
 			}	
 		}
-		echo "Pido a Proveedores, Envio mail a David x el producto ".$stock_g3['prd_codalfa'].  " \n";
+		echo "Pido a Proveedores, Envio mail a David x el producto id = ".$art_pve['prd_id']." \n";
 		echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
 		$Modificar_registro = "UPDATE detpve SET detpve_destmail='Compras', detpve_sucmail='', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
 		$Mod_reg = mysqli_query($enlace, $Modificar_registro);
 		echo "Marco Producto PVE en tabla detpve como enviado a Compras \n";
-		echo "Salgo del Ciclo Where, ya que el producto fue solicitado a Compras\n\n";
+		//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a Compras\n\n";
 	}
 
 }
@@ -322,153 +322,266 @@ mysqli_free_result ( $Stock_grupo2 );
 mysqli_free_result ( $Stock_grupo3 );
 mysqli_free_result ( $Articulos_pve);
 
-$mail = new PHPMailer ( true );
-
-$mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
-
-$mail->IsSMTP ();
-
-// Activa la condificacción utf-8
-$mail->CharSet = 'UTF-8';
-
-$mail->SMTPAuth = true;
-
-$mail->SMTPDebug = 2;
-
-$mail->Host = "mailen3.cloudsector.net";
-
-$mail->Port = 587;
-
-$mail->Username = "sistema@mipolrepuestos.com";
-
-$mail->Password = "Abc_1234";
-
-$mail->SetFrom ( $MAILSISTEMA );
-
-$mail->FromName = "Servidor Linux de Mipol Repuestos SA";
-
 $Query_Pve_compras = "SELECT * FROM pve 
 INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 INNER JOIN prd ON prd.prd_id = detpve.prd_id
+INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
 WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Compras' AND detpve.detpve_mailenviado = 0;";
 
-$Pve_compras = mysqli_query($enlace, $Query_Pve_compras);
-
-while ($reg_compras = mysqli_fetch_array ($Pve_compras))
+//Envio de Art para solicitar al proveedor
+if ($Pve_compras = mysqli_query($enlace, $Query_Pve_compras))
 {
-	$Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"StockSUC\",\"Fecha Ult Venta\"\r\n";
-	$archivo_compras = openfile();
+	$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\",\"Pedido N\",\"Cliente\",\"Fecha\",\"Suc\"\r\n";
 	$Compras_file= fopen('Compras.csv',"w");
-	fwrite($Suc1,$Datos);
+	fwrite($Compras_file, $Datos);
+
+	while ($reg_compras = mysqli_fetch_array ($Pve_compras))
+	{
+		//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\",\"Pedido N\",\"Cliente\",\"Fecha\",\"Suc\"\r\n";
+		$reg = $reg_compras['cantidad'].",".$reg_compras['prd_id'].",\"".$reg_compras['prd_codalfa']."\",\"".$reg_compras['prd_detanterior']."\",\"".$reg_compras['cpbvta_nro']."\",\"".$reg_compras['pve_detclt']."\",\"".$reg_compras['pve_fechamov']."\",".$reg_compras['pve_suc']."\r\n";
+		fwrite($Compras_file, $reg);
+	}
+
+	fclose($Compras_file);
+
+	$body = "Estimado David: \r\n";
+	$body .= "Saludos y buen día.\r\n";
+	$body .= "En funcion al nuevo proceso para agilizar los Pedidos Especiales de las Sucursales, se adjunta un archivo con los datos de los productos que habra que gestionar ante proveedor.\r\n";
+	$body .= "Muchas gracias por la gestión.\r\n";
+	$body .= "Saludos\r\n";
+
+	$mail->Body = $body;
+
+    $mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
+	$mail->AddAddress ( $MAIL_DMEDINA );
+	$mail->AddAddress ( $MAILSAMMY );
+	$mail->AddBCC ( $MAILTEST );
+	$mail->AddAttachment ( $DIRHOME . 'Compras.csv', 'Compras.csv' );
+
+	$mail->Send ();
+
+	unlink ( $DIRHOME . 'Compras.csv' );
+
+	mysqli_free_result ( $Pve_compras );
 }
 
-
-
+//Empiezo a enviar Mail a Sucursales
 for( $a = 1 ; $a <= 12; $a++ )
 {
-	$mail->clearAttachments();
-	switch ($a) 
- 	{
- 		case 1:
+//	$mail->clearAttachments();
+ 	switch ($a) 
+  	{
+		case 1:
+			$Query_Pve_Suc_1 = "SELECT * FROM pve 
+			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
+			INNER JOIN prd ON prd.prd_id = detpve.prd_id
+			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 1;";
+			
+			if ($Pve_suc_1 = mysqli_query($enlace, $Query_Pve_Suc_1))
+			{
+				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+				$Suc1_file = fopen('Suc1.csv',"w");
+				fwrite($Suc1_file, $Datos);
+			
+				while ($reg_suc_1 = mysqli_fetch_array ($Pve_suc_1))
+				{
+					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+					$reg1 = $reg_suc_1['cantidad'].",".$reg_suc_1['prd_id'].",\"".$reg_suc_1['prd_codalfa']."\",\"".$reg_suc_1['prd_detanterior']."\"\r\n";
+					fwrite($Suc1_file, $reg1);
+				}
+			
+				fclose($Suc1_file);
+			
 				$body = "Estimado " .$ENCARGADO_CC. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
-				$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
-				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente para resolver el pedido NÚMERO DE PEDIDO.\r\n";
+				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
+				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
+				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
-				$body .= "NOMBRE ENCARGADO SUCURSAL QUE PIDE EL PRODUCTO\r\n";
+				//$body .= "NOMBRE ENCARGADO SUCURSAL QUE PIDE EL PRODUCTO\r\n";
 				$body .= "Saludos\r\n";
 
 				$mail->Body = $body;
+			
+				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S";
+				$mail->AddAddress ( $MAIL_DMEDINA );
+				$mail->AddAddress ( $MAILSAMMY );
+				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAttachment ( $DIRHOME . 'Suc1.csv', 'Suc1.csv' );
+			
+				$mail->Send ();
+			
+				unlink ( $DIRHOME . 'Suc1.csv' );
+				mysqli_free_result ( $Pve_suc_1 );
+			
+			}
+	 	break;
 
-// 				$mail->Subject = "PEDIDO DE “NOMBRE DEL PRODUCTO” (título del correo)";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc1.csv', 'Suc1.csv' );
-// 		break;
+	 	case 2:
+			$Query_Pve_Suc_2 = "SELECT * FROM pve 
+			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
+			INNER JOIN prd ON prd.prd_id = detpve.prd_id
+			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 2;";
+			
+			if ($Pve_suc_2 = mysqli_query($enlace, $Query_Pve_Suc_2))
+			{
+				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+				$Suc2_file = fopen('Suc2.csv',"w");
+				fwrite($Suc2_file, $Datos);
+			
+				while ($reg_suc_2 = mysqli_fetch_array ($Pve_suc_2))
+				{
+					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+					$reg2 = $reg_suc_2['cantidad'].",".$reg_suc_2['prd_id'].",\"".$reg_suc_2['prd_codalfa']."\",\"".$reg_suc_2['prd_detanterior']."\"\r\n";
+					fwrite($Suc2_file, $reg2);
+				}
+			
+				fclose($Suc2_file);
+			
+				$body = "Estimado " .$ENCARGADO_SGO. "\r\n";
+				$body .= "Saludos y buen día.\r\n";
+				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
+				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
+				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
+				$body .= "Muchas gracias por la gestión.\r\n";
+				//$body .= "NOMBRE ENCARGADO SUCURSAL QUE PIDE EL PRODUCTO\r\n";
+				$body .= "Saludos\r\n";
 
-// 		case 2:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN REENVIAR A OL DESDE SUC SANTIAGO DEL ESTERO";		
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc2.csv', 'Suc2.csv' );
-// 		break;
+				$mail->Body = $body;
+			
+				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S";
+				$mail->AddAddress ( $MAIL_DMEDINA );
+				$mail->AddAddress ( $MAILSAMMY );
+				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAttachment ( $DIRHOME . 'Suc2.csv', 'Suc2.csv' );
+			
+				$mail->Send ();
+			
+				unlink ( $DIRHOME . 'Suc2.csv' );
+				mysqli_free_result ( $Pve_suc_2 );
+			
+			}
+		break;
 
-// 		case 3:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN REENVIAR A OL DESDE SUC JUJUY";		
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc3.csv', 'Suc3.csv' );
-// 		break;
+		case 3:
+			$Query_Pve_Suc_3 = "SELECT * FROM pve 
+			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
+			INNER JOIN prd ON prd.prd_id = detpve.prd_id
+			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 3;";
+			
+			if ($Pve_suc_3 = mysqli_query($enlace, $Query_Pve_Suc_3))
+			{
+				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+				$Suc3_file = fopen('Suc3.csv',"w");
+				fwrite($Suc3_file, $Datos);
+			
+				while ($reg_suc_3 = mysqli_fetch_array ($Pve_suc_3))
+				{
+					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+					$reg3 = $reg_suc_3['cantidad'].",".$reg_suc_3['prd_id'].",\"".$reg_suc_3['prd_codalfa']."\",\"".$reg_suc_3['prd_detanterior']."\"\r\n";
+					fwrite($Suc3_file, $reg3);
+				}
+			
+				fclose($Suc3_file);
+			
+				$body = "Estimado " .$ENCARGADO_JUJUY. "\r\n";
+				$body .= "Saludos y buen día.\r\n";
+				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
+				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
+				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
+				$body .= "Muchas gracias por la gestión.\r\n";
+				//$body .= "NOMBRE ENCARGADO SUCURSAL QUE PIDE EL PRODUCTO\r\n";
+				$body .= "Saludos\r\n";
 
-// 		case 5:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CONCEPCION";		
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc5.csv', 'Suc5.csv' );
-// 		break;
+				$mail->Body = $body;
+			
+				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S";
+				$mail->AddAddress ( $MAIL_DMEDINA );
+				$mail->AddAddress ( $MAILSAMMY );
+				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAttachment ( $DIRHOME . 'Suc3.csv', 'Suc3.csv' );
+			
+				$mail->Send ();
+			
+				unlink ( $DIRHOME . 'Suc3.csv' );
+			
+			}	
 
-// 		case 6:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC BR SALI";		
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc6.csv', 'Suc6.csv' );
-// 		break;
+		break;
+	}
+}
 
-// 		case 7:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC LA BANDA DE SGO";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc7.csv', 'Suc7.csv' );
-// 		break;
+// // 		case 5:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CONCEPCION";		
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc5.csv', 'Suc5.csv' );
+// // 		break;
 
-// 		case 8:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC MENDOZA";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc8.csv', 'Suc8.csv' );
-// 		break;
+// // 		case 6:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC BR SALI";		
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc6.csv', 'Suc6.csv' );
+// // 		break;
 
-// 		case 9:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC GA";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc9.csv', 'Suc9.csv' );
-// 		break;
-// 		case 10:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC JB JUSTO";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc10.csv', 'Suc10.csv' );
-// 		break;
+// // 		case 7:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC LA BANDA DE SGO";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc7.csv', 'Suc7.csv' );
+// // 		break;
 
-// 		case 11:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CATAMARCA";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc11.csv', 'Suc11.csv' );
-// 		break;
+// // 		case 8:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC MENDOZA";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc8.csv', 'Suc8.csv' );
+// // 		break;
 
-// 		case 12:
-// 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC SALTA";
-// 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
-// 				$mail->AddAddress ( $MAILSAMMY );
-// 				$mail->AddBCC ( $MAILTEST );
-// 				$mail->AddAttachment ( $DIRHOME . 'Suc12.csv', 'Suc12.csv' );
-// 		break;
-// 	}
-// 	$mail->Send ();
-// }
+// // 		case 9:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC GA";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc9.csv', 'Suc9.csv' );
+// // 		break;
+// // 		case 10:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC JB JUSTO";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc10.csv', 'Suc10.csv' );
+// // 		break;
+
+// // 		case 11:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CATAMARCA";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc11.csv', 'Suc11.csv' );
+// // 		break;
+
+// // 		case 12:
+// // 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC SALTA";
+// // 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
+// // 				$mail->AddAddress ( $MAILSAMMY );
+// // 				$mail->AddBCC ( $MAILTEST );
+// // 				$mail->AddAttachment ( $DIRHOME . 'Suc12.csv', 'Suc12.csv' );
+// // 		break;
+// // 	}
+// // 	$mail->Send ();
+// // }
 
 
 echo "Informes enviados ";

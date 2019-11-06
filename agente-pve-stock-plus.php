@@ -1,7 +1,7 @@
 <?php
 
 $MAILSISTEMA = "sistema@mipolrepuestos.com";
-$MAILTEST = "dretondo@mipolrepuestos.com";
+$MAILTEST = "mbaranello@mipolrepuestos.com";
 $MAILSAMMY = "sammy.moreno@microsolutions.cl";
 $MAILCC_PAEZ = "rpaez@mipolrepuestos.com";
 $MAILCC_RETONDO = "dretondo@mipolrepuestos.com";
@@ -26,6 +26,7 @@ $MAIL_EXPEDICION = "expedicion@grupo-autopartes.com.ar";
 $MAIL_LBARRAZA = "lbarraza@grupo-autopartes.com.ar";
 $MAIL_PPEREZ = "pperez@grupo-autopartes.com.ar";
 $MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
+$MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
 $ENCARGADO_CC = "RAFAEL PAEZ";
 $ENCARGADO_SGO = "MATIAS MARCUCCI";
 $ENCARGADO_JUJUY = "MIGUEL MAIDANA";
@@ -49,5 +50,30 @@ $SUCURSAL_GA = "SUCURSAL GRUPO AUTOPARTES - VENTAS";
 $SUCURSAL_JBJ = "SUCURSAL J.B. JUSTO";
 $SUCURSAL_CAT = "SUCURSAL CATAMARCA";
 $SUCURSAL_SALTA = "SUCURSAL SALTA";
+
+$mail = new PHPMailer ( true );
+
+$mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
+
+$mail->IsSMTP ();
+
+// Activa la condificacción utf-8
+$mail->CharSet = 'UTF-8';
+
+$mail->SMTPAuth = true;
+
+$mail->SMTPDebug = 2;
+
+$mail->Host = "mailen3.cloudsector.net";
+
+$mail->Port = 587;
+
+$mail->Username = "sistema@mipolrepuestos.com";
+
+$mail->Password = "Abc_1234";
+
+$mail->SetFrom ( $MAILSISTEMA );
+
+$mail->FromName = "Servidor Linux de Mipol Repuestos SA";
 
 ?>
