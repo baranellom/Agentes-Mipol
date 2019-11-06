@@ -316,10 +316,10 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 }
 
 /* liberar el conjunto de resultados de Stock Negativos*/
-mysqli_free_result ( $Stock_grupo1 );
-mysqli_free_result ( $Stock_grupo2 );
-mysqli_free_result ( $Stock_grupo3 );
-mysqli_free_result ( $Articulos_pve);
+// mysqli_free_result ( $Stock_grupo1 );
+// mysqli_free_result ( $Stock_grupo2 );
+// mysqli_free_result ( $Stock_grupo3 );
+// mysqli_free_result ( $Articulos_pve);
 
 $Query_Pve_compras = "SELECT * FROM pve 
 INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
@@ -343,6 +343,8 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	fclose($Compras_file);
 
+	convertir_CSV_XLS( $Compras_file, 'Compras.xls');
+	
 	$body = "Estimado David: \r\n";
 	$body .= "Saludos y buen día.\r\n";
 	$body .= "En funcion al nuevo proceso para agilizar los Pedidos Especiales de las Sucursales, se adjunta un archivo con los datos de los productos que habra que gestionar ante proveedor.\r\n";
@@ -355,11 +357,11 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$mail->AddAddress ( $MAIL_DMEDINA );
 	$mail->AddAddress ( $MAILSAMMY );
 	$mail->AddBCC ( $MAILTEST );
-	$mail->AddAttachment ( $DIRHOME . 'Compras.csv', 'Compras.csv' );
+	$mail->AddAttachment ( $DIRHOME . 'Compras.xls', 'Compras.xls' );
 
 	$mail->Send ();
 
-	unlink ( $DIRHOME . 'Compras.csv' );
+	unlink ( $DIRHOME . 'Compras.xls' );
 
 	mysqli_free_result ( $Pve_compras );
 }
