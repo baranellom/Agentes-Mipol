@@ -6,10 +6,12 @@
 $DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
+
 include_once ($DIRHOME . "agente-pve-stock-plus.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
-// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
-// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
+require_once ($DIRHOME . "CSVToExcelConverter.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
@@ -343,8 +345,8 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	fclose($Compras_file);
 
-	convertir_CSV_XLS( $Compras_file, 'Compras.xls');
-	
+	CSVToExcelConverter::convert( $DIRHOME . 'Compras.csv', $DIRHOME . 'Compras.xls');
+
 	$body = "Estimado David: \r\n";
 	$body .= "Saludos y buen día.\r\n";
 	$body .= "En funcion al nuevo proceso para agilizar los Pedidos Especiales de las Sucursales, se adjunta un archivo con los datos de los productos que habra que gestionar ante proveedor.\r\n";
@@ -362,6 +364,7 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$mail->Send ();
 
 	unlink ( $DIRHOME . 'Compras.xls' );
+	unlink ( $DIRHOME . 'Compras.csv' );
 
 	mysqli_free_result ( $Pve_compras );
 }
@@ -400,6 +403,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			
 				fclose($Suc1_file);
 				
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc1.csv', $DIRHOME . 'Suc1.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_CC. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -417,11 +421,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc1.csv', 'Suc1.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc1.xlsx', 'Suc1.xlsx' );
 			
 				$mail->Send ();
 			
 				unlink ( $DIRHOME . 'Suc1.csv' );
+				unlink ( $DIRHOME . 'Suc1.xlsx');
+
 				mysqli_free_result ( $Pve_suc_1 );
 			
 			}
@@ -452,6 +458,8 @@ for( $a = 1 ; $a <= 12; $a++ )
 				}
 			
 				fclose($Suc2_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc2.csv', $DIRHOME . 'Suc2.xlsx');
 			
 				$body = "Estimado " .$ENCARGADO_SGO. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -469,11 +477,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc2.csv', 'Suc2.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc2.xlsx', 'Suc2.xlsx' );
 			
 				$mail->Send ();
 			
 				unlink ( $DIRHOME . 'Suc2.csv' );
+				unlink ( $DIRHOME . 'Suc2.xlsx');
+
 				mysqli_free_result ( $Pve_suc_2 );
 			
 			}
