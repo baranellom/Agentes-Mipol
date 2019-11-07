@@ -15,9 +15,6 @@ require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php")
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
-$ARCHIVOCSV = "mipol_ml.csv";
-$ARCHIVOXLS="Reorganizacion_Productos.xlsx";
-
 $grupo_dep1 = "1,5,6,30,46";
 $grupo_dep2 = "2,7";
 $grupo_dep3 = "3,40";
@@ -196,7 +193,6 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			{
 				$Sucs_g1 = $Sucs_g1  . "," .  $stock_g1['Suc'];
 			}
-			
 
 			if ($Stock_1 >= $art_pve['cantidad'])
 			{
@@ -341,11 +337,14 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 		//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\",\"Pedido N\",\"Cliente\",\"Fecha\",\"Suc\"\r\n";
 		$reg = $reg_compras['cantidad'].",".$reg_compras['prd_id'].",\"".$reg_compras['prd_codalfa']."\",\"".$reg_compras['prd_detanterior']."\",\"".$reg_compras['cpbvta_nro']."\",\"".$reg_compras['pve_detclt']."\",\"".$reg_compras['pve_fechamov']."\",".$reg_compras['pve_suc']."\r\n";
 		fwrite($Compras_file, $reg);
+		
+		$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_compras['pve_id'] ." AND pve_suc=". $reg_compras['pve_suc'] ." AND prd_id=". $reg_compras['prd_id'] .";";
+		$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 	}
 
 	fclose($Compras_file);
 
-	CSVToExcelConverter::convert( $DIRHOME . 'Compras.csv', $DIRHOME . 'Compras.xls');
+	CSVToExcelConverter::convert( $DIRHOME . 'Compras.csv', $DIRHOME . 'Compras.xlsx');
 
 	$body = "Estimado David: \r\n";
 	$body .= "Saludos y buen día.\r\n";
@@ -359,11 +358,11 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$mail->AddAddress ( $MAIL_DMEDINA );
 	$mail->AddAddress ( $MAILSAMMY );
 	$mail->AddBCC ( $MAILTEST );
-	$mail->AddAttachment ( $DIRHOME . 'Compras.xls', 'Compras.xls' );
+	$mail->AddAttachment ( $DIRHOME . 'Compras.xlsx', 'Compras.xlsx' );
 
 	$mail->Send ();
 
-	unlink ( $DIRHOME . 'Compras.xls' );
+	unlink ( $DIRHOME . 'Compras.xlsx' );
 	unlink ( $DIRHOME . 'Compras.csv' );
 
 	mysqli_free_result ( $Pve_compras );
@@ -399,6 +398,9 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg1 = $reg_suc_1['cantidad'].",".$reg_suc_1['prd_id'].",\"".$reg_suc_1['prd_codalfa']."\",\"".$reg_suc_1['prd_detanterior']."\"\r\n";
 					fwrite($Suc1_file, $reg1);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_1['pve_id'] ." AND pve_suc=". $reg_suc_1['pve_suc'] ." AND prd_id=". $reg_suc_1['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 			
 				fclose($Suc1_file);
@@ -455,6 +457,9 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg2 = $reg_suc_2['cantidad'].",".$reg_suc_2['prd_id'].",\"".$reg_suc_2['prd_codalfa']."\",\"".$reg_suc_2['prd_detanterior']."\"\r\n";
 					fwrite($Suc2_file, $reg2);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_2['pve_id'] ." AND pve_suc=". $reg_suc_2['pve_suc'] ." AND prd_id=". $reg_suc_2['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 			
 				fclose($Suc2_file);
@@ -507,9 +512,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg3 = $reg_suc_3['cantidad'].",".$reg_suc_3['prd_id'].",\"".$reg_suc_3['prd_codalfa']."\",\"".$reg_suc_3['prd_detanterior']."\"\r\n";
 					fwrite($Suc3_file, $reg3);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_3['pve_id'] ." AND pve_suc=". $reg_suc_3['pve_suc'] ." AND prd_id=". $reg_suc_3['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 			
 				fclose($Suc3_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc3.csv', $DIRHOME . 'Suc3.xlsx');
 			
 				$body = "Estimado " .$ENCARGADO_JUJUY. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -527,12 +537,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc3.csv', 'Suc3.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc3.xlsx', 'Suc3.xlsx' );
 			
 				$mail->Send ();
 			
 				unlink ( $DIRHOME . 'Suc3.csv' );
-			
+				unlink ( $DIRHOME . 'Suc3.xlsx');
+				
+				mysqli_free_result ( $Pve_suc_3 );
 			}	
 
 		break;
@@ -555,9 +567,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg5 = $reg_suc_5['cantidad'].",".$reg_suc_5['prd_id'].",\"".$reg_suc_5['prd_codalfa']."\",\"".$reg_suc_5['prd_detanterior']."\"\r\n";
 					fwrite($Suc5_file, $reg5);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_5['pve_id'] ." AND pve_suc=". $reg_suc_5['pve_suc'] ." AND prd_id=". $reg_suc_5['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 			
 				fclose($Suc5_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc5.csv', $DIRHOME . 'Suc5.xlsx');
 			
 				$body = "Estimado " .$ENCARGADO_CONC. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -575,11 +592,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc5.csv', 'Suc5.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc5.xlsx', 'Suc5.xlsx' );
 			
 				$mail->Send ();
 			
 				unlink ( $DIRHOME . 'Suc5.csv' );
+				unlink ( $DIRHOME . 'Suc5.xlsx');
+
 				mysqli_free_result ( $Pve_suc_5 );
 			}
 
@@ -603,9 +622,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg6 = $reg_suc_6['cantidad'].",".$reg_suc_6['prd_id'].",\"".$reg_suc_6['prd_codalfa']."\",\"".$reg_suc_6['prd_detanterior']."\"\r\n";
 					fwrite($Suc6_file, $reg6);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_6['pve_id'] ." AND pve_suc=". $reg_suc_6['pve_suc'] ." AND prd_id=". $reg_suc_6['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc6_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc6.csv', $DIRHOME . 'Suc6.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_BRS. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -623,11 +647,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc6.csv', 'Suc6.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc6.xlsx', 'Suc6.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc6.csv' );
+				unlink ( $DIRHOME . 'Suc6.xlsx' );
 				mysqli_free_result ( $Pve_suc_6 );
 			}
 		break;
@@ -650,9 +675,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg7 = $reg_suc_7['cantidad'].",".$reg_suc_7['prd_id'].",\"".$reg_suc_7['prd_codalfa']."\",\"".$reg_suc_7['prd_detanterior']."\"\r\n";
 					fwrite($Suc7_file, $reg6);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_7['pve_id'] ." AND pve_suc=". $reg_suc_7['pve_suc'] ." AND prd_id=". $reg_suc_7['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc7_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc7.csv', $DIRHOME . 'Suc7.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_LBS. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -670,11 +700,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc7.csv', 'Suc7.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc7.xlsx', 'Suc7.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc7.csv' );
+				unlink ( $DIRHOME . 'Suc7.xlsx' );
+
 				mysqli_free_result ( $Pve_suc_7 );
 			}
 		
@@ -698,9 +730,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg8 = $reg_suc_8['cantidad'].",".$reg_suc_8['prd_id'].",\"".$reg_suc_8['prd_codalfa']."\",\"".$reg_suc_8['prd_detanterior']."\"\r\n";
 					fwrite($Suc8_file, $reg8);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_8['pve_id'] ." AND pve_suc=". $reg_suc_8['pve_suc'] ." AND prd_id=". $reg_suc_8['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc8_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc8.csv', $DIRHOME . 'Suc8.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_MDZA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -718,11 +755,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc8.csv', 'Suc8.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc8.xlsx', 'Suc8.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc8.csv' );
+				unlink ( $DIRHOME . 'Suc8.xlsx' );
 				mysqli_free_result ( $Pve_suc_8 );
 			}
  		break;
@@ -745,9 +783,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg9 = $reg_suc_9['cantidad'].",".$reg_suc_9['prd_id'].",\"".$reg_suc_9['prd_codalfa']."\",\"".$reg_suc_9['prd_detanterior']."\"\r\n";
 					fwrite($Suc9_file, $reg9);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_9['pve_id'] ." AND pve_suc=". $reg_suc_9['pve_suc'] ." AND prd_id=". $reg_suc_9['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc9_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc9.csv', $DIRHOME . 'Suc9.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_GA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -765,11 +808,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc9.csv', 'Suc9.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc9.xlsx', 'Suc9.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc9.csv' );
+				unlink ( $DIRHOME . 'Suc9.xlsx' );
 				mysqli_free_result ( $Pve_suc_9 );
 
 			}
@@ -792,9 +836,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg10 = $reg_suc_10['cantidad'].",".$reg_suc_10['prd_id'].",\"".$reg_suc_10['prd_codalfa']."\",\"".$reg_suc_10['prd_detanterior']."\"\r\n";
 					fwrite($Suc10_file, $reg10);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_10['pve_id'] ." AND pve_suc=". $reg_suc_10['pve_suc'] ." AND prd_id=". $reg_suc_10['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc10_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc10.csv', $DIRHOME . 'Suc10.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_JBJ. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -808,15 +857,17 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Body = $body;
 
-				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - GA VENTAS";
+				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JB JUSTO";
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc10.csv', 'Suc10.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc10.xlsx', 'Suc10.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc10.csv' );
+				unlink ( $DIRHOME . 'Suc10.xlsx' );
+
 				mysqli_free_result ( $Pve_suc_10 );
 				
 			}
@@ -840,9 +891,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg11 = $reg_suc_11['cantidad'].",".$reg_suc_11['prd_id'].",\"".$reg_suc_11['prd_codalfa']."\",\"".$reg_suc_11['prd_detanterior']."\"\r\n";
 					fwrite($Suc11_file, $reg11);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_11['pve_id'] ." AND pve_suc=". $reg_suc_11['pve_suc'] ." AND prd_id=". $reg_suc_11['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc11_file);
+
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc11.csv', $DIRHOME . 'Suc11.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_CAT. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -860,11 +916,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc11.csv', 'Suc11.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc11.xlsx', 'Suc11.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc11.csv' );
+				unlink ( $DIRHOME . 'Suc11.xlsx' );
+
 				mysqli_free_result ( $Pve_suc_11 );
 			
 			}
@@ -888,9 +946,14 @@ for( $a = 1 ; $a <= 12; $a++ )
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg12 = $reg_suc_12['cantidad'].",".$reg_suc_12['prd_id'].",\"".$reg_suc_12['prd_codalfa']."\",\"".$reg_suc_12['prd_detanterior']."\"\r\n";
 					fwrite($Suc12_file, $reg12);
+
+					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_12['pve_id'] ." AND pve_suc=". $reg_suc_12['pve_suc'] ." AND prd_id=". $reg_suc_12['prd_id'] .";";
+					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
 
 				fclose($Suc12_file);
+				
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc12.csv', $DIRHOME . 'Suc12.xlsx');
 
 				$body = "Estimado " .$ENCARGADO_SALTA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
@@ -904,15 +967,17 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Body = $body;
 
-				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CATAMARCA";
+				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SALTA";
 				$mail->AddAddress ( $MAIL_DMEDINA );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc12.csv', 'Suc12.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc12.xlsx', 'Suc12.xlsx' );
 
 				$mail->Send ();
 
 				unlink ( $DIRHOME . 'Suc12.csv' );
+				unlink ( $DIRHOME . 'Suc12.xlsx' );
+
 				mysqli_free_result ( $Pve_suc_12 );
 			
 			}

@@ -27,8 +27,8 @@ $MAIL_EXPEDICION = "expedicion@grupo-autopartes.com.ar";
 $MAIL_LBARRAZA = "lbarraza@grupo-autopartes.com.ar";
 $MAIL_PPEREZ = "pperez@grupo-autopartes.com.ar";
 $MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
-//$MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
-$MAIL_DMEDINA = "mbaranello@mipolrepuestos.com";
+$MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
+//$MAIL_DMEDINA = "mbaranello@mipolrepuestos.com";
 
 $ENCARGADO_CC = "RAFAEL PAEZ";
 $ENCARGADO_SGO = "MATIAS MARCUCCI";
