@@ -433,9 +433,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CC";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
+				$mail->AddAddress ( $MAILCC_RETONDO );
+				$mail->AddCC ( $MAILSAMMY );
+				$mail->addCC ( $MAIL_DMEDINA );
 				$mail->AddBCC ( $MAILTEST );
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc1.xlsx', 'Suc1.xlsx' );
 			
 				$mail->Send ();
@@ -492,8 +494,9 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SGO";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
+				$mail->AddAddress ( $MAILSGO_MM );
+				$mail->AddCC ( $MAILSAMMY );
+				$mail->addCC ( $MAIL_DMEDINA );
 				$mail->AddBCC ( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc2.xlsx', 'Suc2.xlsx' );
 			
@@ -547,9 +550,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JUJUY";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILJUJUY );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc3.xlsx', 'Suc3.xlsx' );
 			
 				$mail->Send ();
@@ -602,9 +606,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CONCEPCION";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILCONCEPCION );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc5.xlsx', 'Suc5.xlsx' );
 			
 				$mail->Send ();
@@ -657,9 +662,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - BR SALI";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILBRS );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc6.xlsx', 'Suc6.xlsx' );
 
 				$mail->Send ();
@@ -710,9 +716,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - LA BANDA -SGO";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILLB );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc7.xlsx', 'Suc7.xlsx' );
 
 				$mail->Send ();
@@ -765,9 +772,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - MENDOZA";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILMENDONZA );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc8.xlsx', 'Suc8.xlsx' );
 
 				$mail->Send ();
@@ -818,9 +826,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - GA VENTAS";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILMORENO );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc9.xlsx', 'Suc9.xlsx' );
 
 				$mail->Send ();
@@ -871,9 +880,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JB JUSTO";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILJBJUSTO );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc10.xlsx', 'Suc10.xlsx' );
 
 				$mail->Send ();
@@ -926,9 +936,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CATAMARCA";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILCATAMARCA );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc11.xlsx', 'Suc11.xlsx' );
 
 				$mail->Send ();
@@ -981,9 +992,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SALTA";
-				$mail->AddAddress ( $MAIL_DMEDINA );
-				$mail->AddAddress ( $MAILSAMMY );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress( $MAILSALTA );
+				$mail->AddCC( $MAILSAMMY );
+				$mail->addCC( $MAIL_DMEDINA );
+				$mail->AddBCC( $MAILTEST );
 				$mail->AddAttachment ( $DIRHOME . 'Suc12.xlsx', 'Suc12.xlsx' );
 
 				$mail->Send ();
