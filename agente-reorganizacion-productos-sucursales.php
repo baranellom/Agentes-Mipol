@@ -73,8 +73,9 @@ $i = 0;
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
-// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
-// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
+require_once ($DIRHOME . "CSVToExcelConverter.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
@@ -617,90 +618,101 @@ for( $a = 1 ; $a <= 12; $a++ )
 	switch ($a) 
 	{
 		case 1:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc1.csv', $DIRHOME . 'Suc1.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN REENVIAR A OL DESDE SUC CASA CENTRAL";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc1.csv', 'Suc1.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc1.xlsx', 'Suc1.xlsx' );
 		break;
 
 		case 2:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc2.csv', $DIRHOME . 'Suc2.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN REENVIAR A OL DESDE SUC SANTIAGO DEL ESTERO";		
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc2.csv', 'Suc2.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc2.xlsx', 'Suc2.xlsx' );
 		break;
 
 		case 3:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc3.csv', $DIRHOME . 'Suc3.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN REENVIAR A OL DESDE SUC JUJUY";		
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc3.csv', 'Suc3.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc3.xlsx', 'Suc3.xlsx' );
 		break;
 
 		case 5:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc5.csv', $DIRHOME . 'Suc5.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CONCEPCION";		
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc5.csv', 'Suc5.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc5.xlsx', 'Suc5.xlsx' );
 		break;
 
 		case 6:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc6.csv', $DIRHOME . 'Suc6.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC BR SALI";		
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc6.csv', 'Suc6.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc6.xlsx', 'Suc6.xlsx' );
 		break;
 
 		case 7:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc7.csv', $DIRHOME . 'Suc7.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC LA BANDA DE SGO";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc7.csv', 'Suc7.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc7.xlsx', 'Suc7.xlsx' );
 		break;
 
 		case 8:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc8.csv', $DIRHOME . 'Suc8.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC MENDOZA";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc8.csv', 'Suc8.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc8.xlsx', 'Suc8.xlsx' );
 		break;
 
 		case 9:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc9.csv', $DIRHOME . 'Suc9.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC GA";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc9.csv', 'Suc9.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc9.xlsx', 'Suc9.xlsx' );
 		break;
 		case 10:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc10.csv', $DIRHOME . 'Suc10.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC JB JUSTO";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc10.csv', 'Suc10.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc10.xlsx', 'Suc10.xlsx' );
 		break;
 
 		case 11:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc11.csv', $DIRHOME . 'Suc11.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC CATAMARCA";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc11.csv', 'Suc11.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc11.xlsx', 'Suc11.xlsx' );
 		break;
 
 		case 12:
+				CSVToExcelConverter::convert( $DIRHOME . 'Suc12.csv', $DIRHOME . 'Suc12.xlsx');
 				$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN RENVIAR A OL DESDE SUC SALTA";
 				//$mail->AddAddress ( $MAIL_WSANCHEZ );
 				$mail->AddAddress ( $MAILSAMMY );
 				$mail->AddBCC ( $MAILTEST );
-				$mail->AddAttachment ( $DIRHOME . 'Suc12.csv', 'Suc12.csv' );
+				$mail->AddAttachment ( $DIRHOME . 'Suc12.xlsx', 'Suc12.xlsx' );
 		break;
 	}
 	$mail->Send ();
