@@ -51,9 +51,11 @@ if (mysqli_connect_errno ()) {
 //$depositos = mysqli_query ( $enlace, $Depositos_SQL );
 $Articulos_pve = mysqli_query ( $enlace, $Consulta_inicial );
 
-#Calculamos con los productos que se agregaron a la tabla de PVE, los Stock disponibles en los Grupos de Sucursales
+#Calculamos con los productos que se agregaron a la tabla de DETPVE, los Stock disponibles en los Grupos de Sucursales
 while ($art_pve = mysqli_fetch_array($Articulos_pve)) 
 {
+	$resuelto = false;
+
 	$ConsultaStock_Suc_Grupo1 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
 	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
 	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
@@ -156,6 +158,12 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	
 	// echo $ConsultaStock_Suc_Grupo3 . "\n";
 
+
+	/* liberar el conjunto de resultados de Stock Negativos*/
+	// mysqli_free_result ( $Stock_grupo1 );
+	// mysqli_free_result ( $Stock_grupo2 );
+	// mysqli_free_result ( $Stock_grupo3 );
+
 	$Stock_grupo1 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo1 ); 
 	$Stock_grupo2 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo2 ); 
 	$Stock_grupo3 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo3 ); 
@@ -184,31 +192,32 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 		}
 		else 
 		{
-			$Stock_1 = $Stock_1 + $stock_g1['Stock_Total'];
-			if ($Sucs_g1 == "")
-			{
-				$Sucs_g1 = $stock_g1['Suc'];
-			}
-			else 
-			{
-				$Sucs_g1 = $Sucs_g1  . "," .  $stock_g1['Suc'];
-			}
+		// 	$Stock_1 = $Stock_1 + $stock_g1['Stock_Total'];
+		// 	if ($Sucs_g1 == "")
+		// 	{
+		// 		$Sucs_g1 = $stock_g1['Suc'];
+		// 	}
+		// 	else 
+		// 	{
+		// 		$Sucs_g1 = $Sucs_g1  . "," .  $stock_g1['Suc'];
+		// 	}
 
-			if ($Stock_1 >= $art_pve['cantidad'])
-			{
-				echo "Pido x mail a las Suc's " . $stock_g1['Suc']." el producto ".$stock_g1['prd_codalfa'].  " \n";
-				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-				echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g1 . "\n";
-				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g1."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-				$resuelto = true;
-				break;
-			}
-			else {
+		// 	if ($Stock_1 >= $art_pve['cantidad'])
+		// 	{
+		// 		echo "Pido x mail a las Suc's " . $stock_g1['Suc']." el producto ".$stock_g1['prd_codalfa'].  " \n";
+		// 		echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+		// 		echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g1 . "\n";
+		// 		echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+		// 		$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g1."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+		// 		$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+		// 		//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+		// 		$resuelto = true;
+		// 		break;
+		// 	}
+		// 	else 
+		//	{
 				$resuelto = false;
-			}
+		// 	}
 			
 		}
 	}
@@ -229,32 +238,32 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			}
 			else 
 			{
-				$Stock_2 = $Stock_2 + $stock_g2['Stock_Total'];
-				if ($Sucs_g2 == "")
-				{
-					$Sucs_g2 = $stock_g2['Suc'];
-				}
-				else 
-				{
-					$Sucs_g2 = $Sucs_g2  . "," .  $stock_g2['Suc'];
-				}
+				// $Stock_2 = $Stock_2 + $stock_g2['Stock_Total'];
+				// if ($Sucs_g2 == "")
+				// {
+				// 	$Sucs_g2 = $stock_g2['Suc'];
+				// }
+				// else 
+				// {
+				// 	$Sucs_g2 = $Sucs_g2  . "," .  $stock_g2['Suc'];
+				// }
 
-				if ($Stock_2 >= $art_pve['cantidad'])
-				{
-					echo "Pido x mail a las Suc's " . $stock_g2['Suc']." el producto ".$stock_g2['prd_codalfa'].  " \n";
-					echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-					echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g2 . "\n";
-					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-					$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g2."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-					$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-					//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-					$resuelto = true;
-					break;
-				}
-				else 
-				{
+				// if ($Stock_2 >= $art_pve['cantidad'])
+				// {
+				// 	echo "Pido x mail a las Suc's " . $stock_g2['Suc']." el producto ".$stock_g2['prd_codalfa'].  " \n";
+				// 	echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				// 	echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g2 . "\n";
+				// 	echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				// 	$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g2."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+				// 	$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+				// 	//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				// 	$resuelto = true;
+				// 	break;
+				// }
+				// else 
+				// {
 				$resuelto = false;
-				}
+				// }
 			}	
 		}
 	}
@@ -275,40 +284,44 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			}
 			else 
 			{
-				$Stock_3 = $Stock_3 + $stock_g3['Stock_Total'];
-				if ($Sucs_g3 == "")
-				{
-					$Sucs_g3 = $stock_g3['Suc'];
-				}
-				else 
-				{
-					$Sucs_g3 = $Sucs_g3  . "," .  $stock_g3['Suc'];
-				}
+				// $Stock_3 = $Stock_3 + $stock_g3['Stock_Total'];
+				// if ($Sucs_g3 == "")
+				// {
+				// 	$Sucs_g3 = $stock_g3['Suc'];
+				// }
+				// else 
+				// {
+				// 	$Sucs_g3 = $Sucs_g3  . "," .  $stock_g3['Suc'];
+				// }
 
-				if ($Stock_3 >= $art_pve['cantidad'])
-				{
-					echo "Pido x mail a las Suc's " . $stock_g3['Suc']." el producto ".$stock_g3['prd_codalfa'].  " \n";
-					echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-					echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g3 . "\n";
-					echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-					$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g3."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-					$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-					//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-					$resuelto = true;
-					break;
-				}
-				else 
-				{
+				// if ($Stock_3 >= $art_pve['cantidad'])
+				// {
+				// 	echo "Pido x mail a las Suc's " . $stock_g3['Suc']." el producto ".$stock_g3['prd_codalfa'].  " \n";
+				// 	echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				// 	echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g3 . "\n";
+				// 	echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				// 	$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g3."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+				// 	$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+				// 	//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				// 	$resuelto = true;
+				// 	break;
+				// }
+				// else 
+				// {
 				$resuelto = false;
-				}
+				// }
 			}	
 		}
-		echo "Pido a Proveedores, Envio mail a David x el producto id = ".$art_pve['prd_id']." \n";
-		echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-		$Modificar_registro = "UPDATE detpve SET detpve_destmail='Compras', detpve_sucmail='', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-		$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-		echo "Marco Producto PVE en tabla detpve como enviado a Compras \n";
-		//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a Compras\n\n";
+		
+		if ($resuelto == false)
+		{
+			echo "Pido a Proveedores, Envio mail a David x el producto id = ".$art_pve['prd_id']." \n";
+			echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+			$Modificar_registro = "UPDATE detpve SET detpve_destmail='Compras', detpve_sucmail='', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+			$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+			echo "Marco Producto PVE en tabla detpve como enviado a Compras \n";
+			//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a Compras\n\n";
+		}
 	}
 
 }
@@ -380,7 +393,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 1;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 1;";
 			
 			$Pve_suc_1 = mysqli_query($enlace, $Query_Pve_Suc_1);
 			echo mysqli_num_rows($Pve_suc_1) . "\n";
@@ -440,7 +453,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 2;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 2;";
 			
 			$Pve_suc_2 = mysqli_query($enlace, $Query_Pve_Suc_2);
 
@@ -499,7 +512,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 3;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 3;";
 			
 			if (mysqli_num_rows($Pve_suc_3 = mysqli_query($enlace, $Query_Pve_Suc_3))>0)
 			{
@@ -554,7 +567,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 5;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 5;";
 			
 			if (mysqli_num_rows($Pve_suc_5 = mysqli_query($enlace, $Query_Pve_Suc_5))>0)
 			{
@@ -609,7 +622,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 6;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 6;";
 
 			if (mysqli_num_rows($Pve_suc_6 = mysqli_query($enlace, $Query_Pve_Suc_6))>0)
 			{
@@ -662,7 +675,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 7;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 7;";
 
 			if (mysqli_num_rows($Pve_suc_7 = mysqli_query($enlace, $Query_Pve_Suc_7))>0)
 			{
@@ -717,7 +730,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 8;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 8;";
 
 			if (mysqli_num_rows($Pve_suc_8 = mysqli_query($enlace, $Query_Pve_Suc_8))>0)
 			{
@@ -770,7 +783,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 9;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 9;";
 
 			if (mysqli_num_rows($Pve_suc_9 = mysqli_query($enlace, $Query_Pve_Suc_9))>0)
 			{
@@ -823,7 +836,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 10;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 10;";
 
 			if (mysqli_num_rows($Pve_suc_10 = mysqli_query($enlace, $Query_Pve_Suc_10))>0)
 			{
@@ -878,7 +891,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 11;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 11;";
 
 			if (mysqli_num_rows($Pve_suc_11 = mysqli_query($enlace, $Query_Pve_Suc_11))>0)
 			{
@@ -933,7 +946,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND pve.pve_suc = 12;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 12;";
 
 			if (mysqli_num_rows($Pve_suc_12 = mysqli_query($enlace, $Query_Pve_Suc_12))>0)
 			{
