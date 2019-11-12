@@ -54,29 +54,6 @@ $SUCURSAL_JBJ = "SUCURSAL J.B. JUSTO";
 $SUCURSAL_CAT = "SUCURSAL CATAMARCA";
 $SUCURSAL_SALTA = "SUCURSAL SALTA";
 
-function convertir_CSV_XLS( $file_csv , $file_xls )
-{
-    $extension = pathinfo( "D:/ProyectosVariosMipol/Agentes-Mipol/" . $file_csv, PATHINFO_EXTENSION);
-    
-    echo $extension;
-    
-    if( $extension == "csv" )
-    {
-        //wite to file for XLS
-        include $DIRHOME . "/PHPExcel-1.8.2/Classes/PHPExcel/IOFactory.php";
-              
-        $objReader = PHPExcel_IOFactory::createReader("CSV");
-        $objReader->setDelimiter(',');
-        $objReader->setEnclosure('"');
-        $objReader->setLineEnding(0);
-        
-        $objPHPExcel = $objReader->load($file_csv);
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
-        $objWriter->save($DIRHOME . $file_xls);
-        
-        }
-};
-
 $mail = new PHPMailer ( true );
 
 $mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
@@ -94,7 +71,7 @@ $mail->Host = "mailen3.cloudsector.net";
 
 $mail->Port = 587;
 
-$mail->Username = "sistema@mipolrepuestos.com";
+$mail->Username = "dmedina@mipolrepuestos.com";
 
 $mail->Password = "Abc_1234";
 

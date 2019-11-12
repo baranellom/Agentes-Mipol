@@ -158,12 +158,6 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	
 	// echo $ConsultaStock_Suc_Grupo3 . "\n";
 
-
-	/* liberar el conjunto de resultados de Stock Negativos*/
-	// mysqli_free_result ( $Stock_grupo1 );
-	// mysqli_free_result ( $Stock_grupo2 );
-	// mysqli_free_result ( $Stock_grupo3 );
-
 	$Stock_grupo1 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo1 ); 
 	$Stock_grupo2 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo2 ); 
 	$Stock_grupo3 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo3 ); 
@@ -326,17 +320,18 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 
 }
 
-/* liberar el conjunto de resultados de Stock Negativos*/
-// mysqli_free_result ( $Stock_grupo1 );
-// mysqli_free_result ( $Stock_grupo2 );
-// mysqli_free_result ( $Stock_grupo3 );
-// mysqli_free_result ( $Articulos_pve);
+$mail->clearAttachments();
+$mail->clearBCCs();
+$mail->clearCCs();
+$mail->clearAddresses();
+$mail->Body = "";
+$mail->Subject = "";
 
 $Query_Pve_compras = "SELECT * FROM pve 
 INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 INNER JOIN prd ON prd.prd_id = detpve.prd_id
-INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Compras' AND detpve.detpve_mailenviado = 0;";
+LEFT JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
+WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Compras' AND ((detpve.detpve_mailenviado = 0) OR (detpve.detpve_mailenviado IS NULL));";
 
 //Envio de Art para solicitar al proveedor
 if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 0)
@@ -385,6 +380,11 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 for( $a = 1 ; $a <= 12; $a++ )
 {
 	$mail->clearAttachments();
+	$mail->clearBCCs();
+	$mail->clearCCs();
+	$mail->clearAddresses();
+	$mail->Body = "";
+	$mail->Subject = "";
 
  	switch ($a) 
   	{
@@ -495,6 +495,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SGO";
 				$mail->AddAddress ( $MAILSGO_MM );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC ( $MAILSAMMY );
 				$mail->addCC ( $MAIL_DMEDINA );
 				$mail->AddBCC ( $MAILTEST );
@@ -551,6 +552,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JUJUY";
 				$mail->AddAddress( $MAILJUJUY );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -607,6 +609,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CONCEPCION";
 				$mail->AddAddress( $MAILCONCEPCION );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -663,6 +666,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - BR SALI";
 				$mail->AddAddress( $MAILBRS );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -717,6 +721,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - LA BANDA -SGO";
 				$mail->AddAddress( $MAILLB );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -773,6 +778,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - MENDOZA";
 				$mail->AddAddress( $MAILMENDONZA );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -827,6 +833,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - GA VENTAS";
 				$mail->AddAddress( $MAILMORENO );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -881,6 +888,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JB JUSTO";
 				$mail->AddAddress( $MAILJBJUSTO );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -937,6 +945,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CATAMARCA";
 				$mail->AddAddress( $MAILCATAMARCA );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
@@ -993,6 +1002,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SALTA";
 				$mail->AddAddress( $MAILSALTA );
+				$mail->AddCC($MAILCC_RETONDO);
 				$mail->AddCC( $MAILSAMMY );
 				$mail->addCC( $MAIL_DMEDINA );
 				$mail->AddBCC( $MAILTEST );
