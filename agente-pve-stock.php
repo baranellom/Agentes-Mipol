@@ -6,7 +6,6 @@
 $DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
-
 include_once ($DIRHOME . "agente-pve-stock-plus.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
 require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
@@ -319,6 +318,31 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	}
 
 }
+
+$mail = new PHPMailer ( true );
+
+$mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
+
+$mail->IsSMTP ();
+
+// Activa la condificacción utf-8
+$mail->CharSet = 'UTF-8';
+
+$mail->SMTPAuth = true;
+
+$mail->SMTPDebug = 2;
+
+$mail->Host = "mailen3.cloudsector.net";
+
+$mail->Port = 587;
+
+$mail->Username = "dmedina@mipolrepuestos.com";
+
+$mail->Password = "Abc$4321";
+
+$mail->SetFrom ( $MAILSISTEMA );
+
+$mail->FromName = "Servidor Linux de Mipol Repuestos SA";
 
 $mail->clearAttachments();
 $mail->clearBCCs();

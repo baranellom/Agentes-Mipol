@@ -1,4 +1,6 @@
 <?php
+
+//$DIRHOME="/usr/share/Alertas/";
 $DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
 
 $MAILSISTEMA = "sistema@mipolrepuestos.com";
@@ -54,29 +56,29 @@ $SUCURSAL_JBJ = "SUCURSAL J.B. JUSTO";
 $SUCURSAL_CAT = "SUCURSAL CATAMARCA";
 $SUCURSAL_SALTA = "SUCURSAL SALTA";
 
-$mail = new PHPMailer ( true );
+// $mail = new PHPMailer ( true );
 
-$mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
+// $mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
 
-$mail->IsSMTP ();
+// $mail->IsSMTP ();
 
-// Activa la condificacción utf-8
-$mail->CharSet = 'UTF-8';
+// // Activa la condificacción utf-8
+// $mail->CharSet = 'UTF-8';
 
-$mail->SMTPAuth = true;
+// $mail->SMTPAuth = true;
 
-$mail->SMTPDebug = 2;
+// $mail->SMTPDebug = 2;
 
-$mail->Host = "mailen3.cloudsector.net";
+// $mail->Host = "mailen3.cloudsector.net";
 
-$mail->Port = 587;
+// $mail->Port = 587;
 
-$mail->Username = "dmedina@mipolrepuestos.com";
+// $mail->Username = "dmedina@mipolrepuestos.com";
 
-$mail->Password = "Abc_1234";
+// $mail->Password = "Abc_1234";
 
-$mail->SetFrom ( $MAILSISTEMA );
+// $mail->SetFrom ( $MAILSISTEMA );
 
-$mail->FromName = "Servidor Linux de Mipol Repuestos SA";
+// $mail->FromName = "Servidor Linux de Mipol Repuestos SA";
 
 ?>
