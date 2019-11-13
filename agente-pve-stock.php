@@ -361,7 +361,7 @@ WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 
 if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 0)
 {
 	$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\",\"Pedido N\",\"Cliente\",\"Fecha\",\"Suc\"\r\n";
-	$Compras_file= fopen('Compras.csv',"w");
+	$Compras_file= fopen($DIRHOME.'Compras.csv',"w");
 	fwrite($Compras_file, $Datos);
 
 	while ($reg_compras = mysqli_fetch_array ($Pve_compras))
@@ -427,7 +427,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "";
 
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc1_file = fopen('Suc1.csv',"w");
+				$Suc1_file = fopen($DIRHOME.'Suc1.csv',"w");
 				fwrite($Suc1_file, $Datos);
 			
 				while ($reg_suc_1 = mysqli_fetch_array ($Pve_suc_1))
@@ -488,7 +488,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_2) > 0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc2_file = fopen('Suc2.csv',"w");
+				$Suc2_file = fopen($DIRHOME.'Suc2.csv',"w");
 				fwrite($Suc2_file, $Datos);
 			
 				while ($reg_suc_2 = mysqli_fetch_array ($Pve_suc_2))
@@ -545,7 +545,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_3 = mysqli_query($enlace, $Query_Pve_Suc_3))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc3_file = fopen('Suc3.csv',"w");
+				$Suc3_file = fopen($DIRHOME.'Suc3.csv',"w");
 				fwrite($Suc3_file, $Datos);
 			
 				while ($reg_suc_3 = mysqli_fetch_array ($Pve_suc_3))
@@ -602,7 +602,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_5 = mysqli_query($enlace, $Query_Pve_Suc_5))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc5_file = fopen('Suc5.csv',"w");
+				$Suc5_file = fopen($DIRHOME.'Suc5.csv',"w");
 				fwrite($Suc5_file, $Datos);
 			
 				while ($reg_suc_5 = mysqli_fetch_array ($Pve_suc_5))
@@ -659,7 +659,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_6 = mysqli_query($enlace, $Query_Pve_Suc_6))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc6_file = fopen('Suc6.csv',"w");
+				$Suc6_file = fopen($DIRHOME.'Suc6.csv',"w");
 				fwrite($Suc6_file, $Datos);
 
 				while ($reg_suc_6 = mysqli_fetch_array ($Pve_suc_6))
@@ -714,7 +714,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_7 = mysqli_query($enlace, $Query_Pve_Suc_7))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc7_file = fopen('Suc7.csv',"w");
+				$Suc7_file = fopen($DIRHOME.'Suc7.csv',"w");
 				fwrite($Suc7_file, $Datos);
 
 				while ($reg_suc_7 = mysqli_fetch_array ($Pve_suc_7))
@@ -771,7 +771,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_8 = mysqli_query($enlace, $Query_Pve_Suc_8))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc8_file = fopen('Suc8.csv',"w");
+				$Suc8_file = fopen($DIRHOME.'Suc8.csv',"w");
 				fwrite($Suc8_file, $Datos);
 
 				while ($reg_suc_8 = mysqli_fetch_array ($Pve_suc_8))
@@ -826,7 +826,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_9 = mysqli_query($enlace, $Query_Pve_Suc_9))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc9_file = fopen('Suc9.csv',"w");
+				$Suc9_file = fopen($DIRHOME.'Suc9.csv',"w");
 				fwrite($Suc9_file, $Datos);
 
 				while ($reg_suc_9 = mysqli_fetch_array ($Pve_suc_9))
@@ -881,7 +881,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_10 = mysqli_query($enlace, $Query_Pve_Suc_10))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc10_file = fopen('Suc10.csv',"w");
+				$Suc10_file = fopen($DIRHOME.'Suc10.csv',"w");
 				fwrite($Suc10_file, $Datos);
 
 				while ($reg_suc_10 = mysqli_fetch_array ($Pve_suc_10))
@@ -938,7 +938,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_11 = mysqli_query($enlace, $Query_Pve_Suc_11))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc11_file = fopen('Suc11.csv',"w");
+				$Suc11_file = fopen($DIRHOME.'Suc11.csv',"w");
 				fwrite($Suc11_file, $Datos);
 
 				while ($reg_suc_11 = mysqli_fetch_array ($Pve_suc_11))
@@ -995,7 +995,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_12 = mysqli_query($enlace, $Query_Pve_Suc_12))>0)
 			{
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-				$Suc12_file = fopen('Suc12.csv',"w");
+				$Suc12_file = fopen($DIRHOME.'Suc12.csv',"w");
 				fwrite($Suc12_file, $Datos);
 
 				while ($reg_suc_12 = mysqli_fetch_array ($Pve_suc_12))
