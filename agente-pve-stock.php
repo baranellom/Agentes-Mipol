@@ -386,7 +386,8 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	$mail->Body = $body;
 
-    $mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
+	$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
+	$mail->addCC($MAILCC_RETONDO);
 	$mail->AddAddress ( $MAIL_DMEDINA );
 	$mail->AddAddress ( $MAILSAMMY );
 	$mail->AddBCC ( $MAILTEST );
@@ -721,7 +722,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				{
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg7 = $reg_suc_7['cantidad'].",".$reg_suc_7['prd_id'].",\"".$reg_suc_7['prd_codalfa']."\",\"".$reg_suc_7['prd_detanterior']."\"\r\n";
-					fwrite($Suc7_file, $reg6);
+					fwrite($Suc7_file, $reg7);
 
 					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_7['pve_id'] ." AND pve_suc=". $reg_suc_7['pve_suc'] ." AND prd_id=". $reg_suc_7['prd_id'] .";";
 					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
