@@ -176,7 +176,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -185,6 +194,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -211,7 +221,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -220,6 +239,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
@@ -247,7 +267,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -256,6 +285,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -282,7 +312,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -291,6 +330,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 				
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -318,7 +358,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 						
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -327,6 +376,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -354,7 +404,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -363,6 +422,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 				
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -390,7 +450,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -399,6 +468,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -425,7 +495,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -434,6 +513,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 				
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -461,7 +541,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -470,6 +559,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -497,8 +587,17 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
-
+						
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
 						// echo "Fecha Ultima Venta: ";
@@ -506,6 +605,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 		
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -534,7 +634,16 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						$fechauv = mysqli_query ( $enlace, $fechaultimaventa );
 
 						$fuv = mysqli_fetch_array($fechauv);
-						printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						
+						if ($fuv['fuv'] != "")
+						{
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
+						else
+						{
+							$fuv['fuv'] = "00/00/9999";
+							printf("Fecha Ultima Venta: ". $fuv['fuv']."\r\n");
+						}
 
 						$cad_fuv= explode("/", $fuv['fuv']);
 						
@@ -543,6 +652,7 @@ while ($art_hab = mysqli_fetch_array($Articulos_habilitados))
 						// printf( "Año". $cad_fuv[2]);
 
 						printf($art_hab['Clasificacion']."\r\n");
+						printf($art_hab['prd_id']."\r\n");
 
 						if (($art_hab['Clasificacion'] <> 'N') && ($cad_fuv[2] < 2019))
 						{
@@ -600,7 +710,7 @@ $mail->Password = "Abc_1234";
 
 $mail->SetFrom ( $MAILSISTEMA );
 
-$mail->FromName = "Servidor Linux de Mipol Repuestos SA";
+$mail->FromName = "Sammy Moreno";
 
 $body = "Estimado Encargado\r\n";
 $body .= "Saludos y buen día.\r\n";
