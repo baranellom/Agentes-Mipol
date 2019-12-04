@@ -14,14 +14,20 @@ require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php")
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
 // require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
 
-$grupo_dep1 = "1,5,6,30,46";
-$grupo_dep2 = "2,7";
-$grupo_dep3 = "3,40";
-$grupo_dep4 = "8,36";
+$grupo_dep1 = "45,46";	//Dep Los Pocitos, Suc Autopartes
+$grupo_dep2 = "1,6,30";	//Dep CC, BRS, JBJ
+$grupo_dep3 = "5";		//Concep
+$grupo_dep4 = "2,7";	// Dep Sgo, LB
+$grupo_dep5 = "3,40";   //Dep Jujuy, Salta
+$grupo_dep6 = "8,36";   //Dep Catam, Mendoza
+
 $resuelto = false;
 $Stock_1 = 0;
 $Stock_2 = 0;
 $Stock_3 = 0;
+$Stock_4 = 0;
+$Stock_5 = 0;
+$Stock_6 = 0;
 
 $i = 0;
 
@@ -55,6 +61,38 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 {
 	$resuelto = false;
 
+	// $ConsultaStock_Suc_Grupo1 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
+	// IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
+	// IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
+	// IF(r_dpt_prd.r_stock = 0, stock_mp.stock, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED))) AS Stock_Total,
+	// stock_mp.suc_id AS Suc,
+	// r_dpt_prd.dpt_id AS Dep_Suc,
+	// stock_mp.stock AS Stock_Suc_Full,
+	// CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
+	// r_dpt_prd.r_stock AS Reponer_Suc,
+	// prd.prd_clasificacion AS Clasificacion,
+	// (SELECT max(c.cpbvta_fecha)
+	// FROM cpbvta c 
+	// INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
+	// WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	// (SELECT MAX(cs.cpbstock_fecha)
+	// FROM cpbstock cs 
+	// INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	// WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
+	// FROM r_dpt_prd
+	// INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
+	// INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
+	// WHERE (
+	// (r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
+	// AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
+	// ) 
+	// OR 
+	// (r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
+	// AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
+	// AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
+	// ) )
+	// AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 1 DAY) /*IPSUC ingresadas 1 dias antes*/ ORDER BY 14 ASC;";
+
 	$ConsultaStock_Suc_Grupo1 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
 	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
 	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
@@ -76,19 +114,8 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
-	WHERE (
-	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
-	) 
-	OR 
-	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/
-	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
-	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
-
-	//echo $ConsultaStock_Suc_Grupo1 . "\n";
-
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep1.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+	
 	$ConsultaStock_Suc_Grupo2 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
 	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
 	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
@@ -110,16 +137,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
-	WHERE (
-	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 2*/
-	) 
-	OR 
-	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 2*/
-	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
-	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep2.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
 
 	// echo $ConsultaStock_Suc_Grupo2 . "\n";
 
@@ -144,30 +162,100 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 	FROM r_dpt_prd
 	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
 	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
-	WHERE (
-	(r_dpt_prd.r_stock = 0 /*Sin definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 3*/
-	) 
-	OR 
-	(r_dpt_prd.r_stock = 1 /*Con definicion de Maximos y Minimos*/ 
-	AND stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 3*/
-	AND (stock_mp.stock - r_dpt_prd.r_maximo > 0) /*Que el Stock sea Superior al Maximo definido*/ 
-	) )
-	AND prd.prd_id = ".$art_pve['prd_id']." HAVING U_IpSuc < (CURDATE() - INTERVAL 14 DAY) /*IPSUC ingresadas 14 dias antes*/ ORDER BY 14 ASC;";
-	
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep3.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+
+	$ConsultaStock_Suc_Grupo4 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
+	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED))) AS Stock_Total,
+	stock_mp.suc_id AS Suc,
+	r_dpt_prd.dpt_id AS Dep_Suc,
+	stock_mp.stock AS Stock_Suc_Full,
+	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
+	r_dpt_prd.r_stock AS Reponer_Suc,
+	prd.prd_clasificacion AS Clasificacion,
+	(SELECT max(c.cpbvta_fecha)
+	FROM cpbvta c 
+	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
+	FROM r_dpt_prd
+	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
+	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep4.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+
+	$ConsultaStock_Suc_Grupo5 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
+	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED))) AS Stock_Total,
+	stock_mp.suc_id AS Suc,
+	r_dpt_prd.dpt_id AS Dep_Suc,
+	stock_mp.stock AS Stock_Suc_Full,
+	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
+	r_dpt_prd.r_stock AS Reponer_Suc,
+	prd.prd_clasificacion AS Clasificacion,
+	(SELECT max(c.cpbvta_fecha)
+	FROM cpbvta c 
+	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
+	FROM r_dpt_prd
+	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
+	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep5.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+
+
+	$ConsultaStock_Suc_Grupo6 = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, 0) AS Stk_Libre, 
+	IF(r_dpt_prd.r_stock >= 1, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED)), 0) AS 'Dif_Stk_Max', 
+	IF(r_dpt_prd.r_stock = 0, stock_mp.stock, (stock_mp.stock - CAST(r_dpt_prd.r_maximo AS SIGNED))) AS Stock_Total,
+	stock_mp.suc_id AS Suc,
+	r_dpt_prd.dpt_id AS Dep_Suc,
+	stock_mp.stock AS Stock_Suc_Full,
+	CAST(r_dpt_prd.r_maximo AS SIGNED) AS Max_Suc, 
+	r_dpt_prd.r_stock AS Reponer_Suc,
+	prd.prd_clasificacion AS Clasificacion,
+	(SELECT max(c.cpbvta_fecha)
+	FROM cpbvta c 
+	INNER JOIN  detcpbvta d on c.cpbvta_id = d.cpbvta_id and c.cpbvta_suc = d.cpbvta_suc 
+	WHERE c.cpbvta_tipocpb=1  AND ((c.cpbvta_fecanul IS NULL) OR (c.cpbvta_fecanul='0000-00-00')) AND d.Prd_id = ".$art_pve['prd_id']." AND c.cpbvta_suc  = stock_mp.suc_id GROUP BY d.Prd_id) AS U_Venta,
+	(SELECT MAX(cs.cpbstock_fecha)
+	FROM cpbstock cs 
+	INNER JOIN detcpbstock_prd dcs ON cs.cpbstock_id = dcs.cpbstock_id AND cs.cpbstock_suc = dcs.cpbstock_suc
+	WHERE cs.TipoCpb_id=89 AND ((cs.cpbstock_fecanul IS NULL) OR (cs.cpbstock_fecanul='0000-00-00')) AND dcs.Prd_id = ".$art_pve['prd_id']." AND cs.cpbstock_suc = stock_mp.suc_id GROUP BY dcs.Prd_id) AS U_IpSuc
+	FROM r_dpt_prd
+	INNER JOIN stock_mp ON r_dpt_prd.prd_id = stock_mp.prd_id AND r_dpt_prd.dpt_id = stock_mp.dpt_id
+	INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
+	WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$grupo_dep6.") /* Consultar en Depositos Grupo 1*/ AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
+
 	// echo $ConsultaStock_Suc_Grupo3 . "\n";
 
 	$Stock_grupo1 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo1 ); 
 	$Stock_grupo2 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo2 ); 
 	$Stock_grupo3 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo3 ); 
+	$Stock_grupo4 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo4 ); 
+	$Stock_grupo5 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo5 ); 
+	$Stock_grupo6 = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo6 ); 
 
 	$Stock_1 = 0;
 	$Stock_2 = 0;
 	$Stock_3 = 0;
+	$Stock_4 = 0;
+	$Stock_5 = 0;
+	$Stock_6 = 0;
 
 	$Sucs_g1 = "";
 	$Sucs_g2 = "";
 	$Sucs_g3 = "";
+	$Sucs_g4 = "";
+	$Sucs_g5 = "";
+	$Sucs_g6 = "";
 
 	// Si existen productos en el grupo 1 que satisfaga el Stock necesitado 
 	while ($stock_g1 = mysqli_fetch_array($Stock_grupo1)) 
@@ -185,33 +273,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 		}
 		else 
 		{
-		// 	$Stock_1 = $Stock_1 + $stock_g1['Stock_Total'];
-		// 	if ($Sucs_g1 == "")
-		// 	{
-		// 		$Sucs_g1 = $stock_g1['Suc'];
-		// 	}
-		// 	else 
-		// 	{
-		// 		$Sucs_g1 = $Sucs_g1  . "," .  $stock_g1['Suc'];
-		// 	}
-
-		// 	if ($Stock_1 >= $art_pve['cantidad'])
-		// 	{
-		// 		echo "Pido x mail a las Suc's " . $stock_g1['Suc']." el producto ".$stock_g1['prd_codalfa'].  " \n";
-		// 		echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-		// 		echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g1 . "\n";
-		// 		echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-		// 		$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g1."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-		// 		$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-		// 		//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-		// 		$resuelto = true;
-		// 		break;
-		// 	}
-		// 	else 
-		//	{
-				$resuelto = false;
-		// 	}
-			
+			$resuelto = false;
 		}
 	}
 	if ($resuelto == false)
@@ -231,38 +293,14 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			}
 			else 
 			{
-				// $Stock_2 = $Stock_2 + $stock_g2['Stock_Total'];
-				// if ($Sucs_g2 == "")
-				// {
-				// 	$Sucs_g2 = $stock_g2['Suc'];
-				// }
-				// else 
-				// {
-				// 	$Sucs_g2 = $Sucs_g2  . "," .  $stock_g2['Suc'];
-				// }
-
-				// if ($Stock_2 >= $art_pve['cantidad'])
-				// {
-				// 	echo "Pido x mail a las Suc's " . $stock_g2['Suc']." el producto ".$stock_g2['prd_codalfa'].  " \n";
-				// 	echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-				// 	echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g2 . "\n";
-				// 	echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-				// 	$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g2."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-				// 	$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				// 	//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-				// 	$resuelto = true;
-				// 	break;
-				// }
-				// else 
-				// {
 				$resuelto = false;
-				// }
 			}	
 		}
 	}
+
 	if ($resuelto == false)
 	{
-		while ($stock_g3 = mysqli_fetch_array($Stock_grupo2)) 
+		while ($stock_g3 = mysqli_fetch_array($Stock_grupo3)) 
 		{
 			if ($stock_g3['Stock_Total'] >= $art_pve['cantidad']) 
 			{
@@ -277,32 +315,73 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve))
 			}
 			else 
 			{
-				// $Stock_3 = $Stock_3 + $stock_g3['Stock_Total'];
-				// if ($Sucs_g3 == "")
-				// {
-				// 	$Sucs_g3 = $stock_g3['Suc'];
-				// }
-				// else 
-				// {
-				// 	$Sucs_g3 = $Sucs_g3  . "," .  $stock_g3['Suc'];
-				// }
-
-				// if ($Stock_3 >= $art_pve['cantidad'])
-				// {
-				// 	echo "Pido x mail a las Suc's " . $stock_g3['Suc']." el producto ".$stock_g3['prd_codalfa'].  " \n";
-				// 	echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
-				// 	echo "Hay que pedir este producto a Las Siguientes Suc's: ". $Sucs_g3 . "\n";
-				// 	echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
-				// 	$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $Sucs_g3."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
-				// 	$Mod_reg = mysqli_query($enlace, $Modificar_registro);
-				// 	//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
-				// 	$resuelto = true;
-				// 	break;
-				// }
-				// else 
-				// {
 				$resuelto = false;
-				// }
+			}	
+		}
+	}
+
+	if ($resuelto == false)
+	{
+		while ($stock_g4 = mysqli_fetch_array($Stock_grupo4)) 
+		{
+			if ($stock_g4['Stock_Total'] >= $art_pve['cantidad']) 
+			{
+				echo "Pido x mail a Suc " . $stock_g4['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g4['prd_codalfa'].", ID = ".$stock_g4['prd_id']. " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g4['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				$resuelto = true;
+				break;
+			}
+			else 
+			{
+				$resuelto = false;
+			}	
+		}
+	}
+
+	if ($resuelto == false)
+	{
+		while ($stock_g5 = mysqli_fetch_array($Stock_grupo5)) 
+		{
+			if ($stock_g5['Stock_Total'] >= $art_pve['cantidad']) 
+			{
+				echo "Pido x mail a Suc " . $stock_g5['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g5['prd_codalfa'].", ID = ".$stock_g5['prd_id']. " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g5['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				$resuelto = true;
+				break;
+			}
+			else 
+			{
+				$resuelto = false;
+			}	
+		}
+	}
+
+	if ($resuelto == false)
+	{
+		while ($stock_g6 = mysqli_fetch_array($Stock_grupo6)) 
+		{
+			if ($stock_g6['Stock_Total'] >= $art_pve['cantidad']) 
+			{
+				echo "Pido x mail a Suc " . $stock_g6['Suc'].", ". $art_pve['cantidad'] ." unidad/es del producto ".$stock_g6['prd_codalfa'].", ID = ".$stock_g6['prd_id']. " \n";
+				echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
+				echo "Marco Producto PVE en tabla detpve como enviado a Suc \n";
+				$Modificar_registro = "UPDATE detpve SET detpve_destmail='Sucursal', detpve_sucmail='" . $stock_g6['Suc']."', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;";
+				$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+				//echo "Salgo del Ciclo Where, ya que el producto fue solicitado a una Sucursal\n\n";
+				$resuelto = true;
+				break;
+			}
+			else 
+			{
+				$resuelto = false;
 			}	
 		}
 		
@@ -336,7 +415,7 @@ $mail->Host = "mailen3.cloudsector.net";
 
 $mail->Port = 587;
 
-$mail->Username = "dmedina@mipolrepuestos.com";
+$mail->Username = "sistema@mipolrepuestos.com";
 
 $mail->Password = "Abc$4321";
 
@@ -378,7 +457,7 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	CSVToExcelConverter::convert( $DIRHOME . 'Compras.csv', $DIRHOME . 'Compras.xlsx');
 
-	$body = "Estimado David: \r\n";
+	$body = "Estimado Marcelo: \r\n";
 	$body .= "Saludos y buen día.\r\n";
 	$body .= "En funcion al nuevo proceso para agilizar los Pedidos Especiales de las Sucursales, se adjunta un archivo con los datos de los productos que habra que gestionar ante proveedor.\r\n";
 	$body .= "Muchas gracias por la gestión.\r\n";
@@ -388,10 +467,11 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
 	$mail->addCC($MAILCC_RETONDO);
-	$mail->AddAddress ( $MAIL_DMEDINA );
-	$mail->AddAddress ( $MAILSAMMY );
-	$mail->AddBCC ( $MAILTEST );
-	$mail->AddAttachment ( $DIRHOME . 'Compras.xlsx', 'Compras.xlsx' );
+	$mail->AddAddress($MAIL_FHOYOS);
+	$mail->AddAddress($MAIL_MDIP);
+	$mail->AddAddress($MAILSAMMY);
+	$mail->AddBCC($MAILTEST);
+	$mail->AddAttachment( $DIRHOME . 'Compras.xlsx', 'Compras.xlsx' );
 
 	$mail->Send ();
 
@@ -448,7 +528,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_CC. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -458,10 +538,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CC";
-				$mail->AddAddress ( $MAILCC_RETONDO );
-				$mail->AddCC ( $MAILSAMMY );
-				$mail->addCC ( $MAIL_DMEDINA );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddAddress($MAILCC_RETONDO);
+				$mail->AddAddress($MAIL_JCARRIZO);
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
 
 				$mail->AddAttachment ( $DIRHOME . 'Suc1.xlsx', 'Suc1.xlsx' );
 			
@@ -509,7 +591,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_SGO. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -519,11 +601,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 			
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SGO";
-				$mail->AddAddress ( $MAILSGO_MM );
+				$mail->AddAddress($MAILSGO_MM);
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC ( $MAILSAMMY );
-				$mail->addCC ( $MAIL_DMEDINA );
-				$mail->AddBCC ( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc2.xlsx', 'Suc2.xlsx' );
 			
 				$mail->Send ();
@@ -566,7 +650,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_JUJUY. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -578,9 +662,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JUJUY";
 				$mail->AddAddress( $MAILJUJUY );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc3.xlsx', 'Suc3.xlsx' );
 			
 				$mail->Send ();
@@ -623,7 +709,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_CONC. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -635,11 +721,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CONCEPCION";
 				$mail->AddAddress( $MAILCONCEPCION );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
 				$mail->AddAttachment ( $DIRHOME . 'Suc5.xlsx', 'Suc5.xlsx' );
-			
+				
 				$mail->Send ();
 			
 				unlink ( $DIRHOME . 'Suc5.csv' );
@@ -680,7 +767,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_BRS. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -690,11 +777,13 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Body = $body;
 
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - BR SALI";
-				$mail->AddAddress( $MAILBRS );
+				$mail->AddAddress($MAILBRS);
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc6.xlsx', 'Suc6.xlsx' );
 
 				$mail->Send ();
@@ -735,7 +824,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_LBS. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -747,9 +836,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - LA BANDA -SGO";
 				$mail->AddAddress( $MAILLB );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+				
 				$mail->AddAttachment ( $DIRHOME . 'Suc7.xlsx', 'Suc7.xlsx' );
 
 				$mail->Send ();
@@ -792,7 +883,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_MDZA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -804,9 +895,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - MENDOZA";
 				$mail->AddAddress( $MAILMENDONZA );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc8.xlsx', 'Suc8.xlsx' );
 
 				$mail->Send ();
@@ -847,7 +940,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_GA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -859,9 +952,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - GA VENTAS";
 				$mail->AddAddress( $MAILMORENO );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc9.xlsx', 'Suc9.xlsx' );
 
 				$mail->Send ();
@@ -902,7 +997,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_JBJ. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -914,9 +1009,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - JB JUSTO";
 				$mail->AddAddress( $MAILJBJUSTO );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc10.xlsx', 'Suc10.xlsx' );
 
 				$mail->Send ();
@@ -959,7 +1056,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_CAT. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -971,9 +1068,11 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CATAMARCA";
 				$mail->AddAddress( $MAILCATAMARCA );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
+
 				$mail->AddAttachment ( $DIRHOME . 'Suc11.xlsx', 'Suc11.xlsx' );
 
 				$mail->Send ();
@@ -1016,7 +1115,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$body = "Estimado " .$ENCARGADO_SALTA. "\r\n";
 				$body .= "Saludos y buen día.\r\n";
 				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo de Texto con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
+				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
 				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
 				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
 				$body .= "Muchas gracias por la gestión.\r\n";
@@ -1028,9 +1127,10 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - SALTA";
 				$mail->AddAddress( $MAILSALTA );
 				$mail->AddCC($MAILCC_RETONDO);
-				$mail->AddCC( $MAILSAMMY );
-				$mail->addCC( $MAIL_DMEDINA );
-				$mail->AddBCC( $MAILTEST );
+				$mail->AddCC($MAILSAMMY);
+				$mail->AddAddress($MAIL_FHOYOS);
+				$mail->AddAddress($MAIL_MDIP);
+				$mail->AddBCC($MAILTEST);
 				$mail->AddAttachment ( $DIRHOME . 'Suc12.xlsx', 'Suc12.xlsx' );
 
 				$mail->Send ();

@@ -31,6 +31,8 @@ $MAIL_PPEREZ = "pperez@grupo-autopartes.com.ar";
 $MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
 $MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
 $MAIL_JCARRIZO = "juanacarrizo@mipolrepuestos.com";
+$MAIL_FHOYOS = "fhoyos@mipolrepuestos.com";
+$MAIL_MDIP = "mdip@mipolrepuestos.com";
 //$MAIL_DMEDINA = "mbaranello@mipolrepuestos.com";
 
 $ENCARGADO_CC = "RAFAEL PAEZ";
