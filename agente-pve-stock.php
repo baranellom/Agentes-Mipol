@@ -417,7 +417,7 @@ $mail->Port = 587;
 
 $mail->Username = "sistema@mipolrepuestos.com";
 
-$mail->Password = "Abc$4321";
+$mail->Password = "Abc_1234";
 
 $mail->SetFrom ( $MAILSISTEMA );
 
@@ -443,11 +443,15 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$Compras_file= fopen($DIRHOME.'Compras.csv',"w");
 	fwrite($Compras_file, $Datos);
 
+	$tablacompras = "";
+
 	while ($reg_compras = mysqli_fetch_array ($Pve_compras))
 	{
 		//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\",\"Pedido N\",\"Cliente\",\"Fecha\",\"Suc\"\r\n";
 		$reg = $reg_compras['cantidad'].",".$reg_compras['prd_id'].",\"".$reg_compras['prd_codalfa']."\",\"".$reg_compras['prd_detanterior']."\",\"".$reg_compras['cpbvta_nro']."\",\"".$reg_compras['pve_detclt']."\",\"".$reg_compras['pve_fechamov']."\",".$reg_compras['pve_suc']."\r\n";
 		fwrite($Compras_file, $reg);
+
+		$tablacompras = $tablacompras . "\n\r" . $reg . "\n\r";
 		
 		$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_compras['pve_id'] ." AND pve_suc=". $reg_compras['pve_suc'] ." AND prd_id=". $reg_compras['prd_id'] .";";
 		$Mod_reg = mysqli_query($enlace, $Modificar_reg);
@@ -460,6 +464,7 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$body = "Estimado Marcelo: \r\n";
 	$body .= "Saludos y buen día.\r\n";
 	$body .= "En funcion al nuevo proceso para agilizar los Pedidos Especiales de las Sucursales, se adjunta un archivo con los datos de los productos que habra que gestionar ante proveedor.\r\n";
+	$body .= $tablacompras;
 	$body .= "Muchas gracias por la gestión.\r\n";
 	$body .= "Saludos\r\n";
 
