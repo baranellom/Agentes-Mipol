@@ -1,5 +1,11 @@
 <?php
-$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
+
+#-- Linux 156
+#$DIRHOME="/usr/share/Alertas/";
+#-- Pc Oficina
+#$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
+#-- Pc de Casa
+$DIRHOME = "D:/Proyectos-Programacion/VisualStudioCode/Agentes-Mipol/";
 
 $MAILSISTEMA = "sistema@mipolrepuestos.com";
 $MAILTEST = "mbaranello@mipolrepuestos.com";
@@ -27,8 +33,14 @@ $MAIL_EXPEDICION = "expedicion@grupo-autopartes.com.ar";
 $MAIL_LBARRAZA = "lbarraza@grupo-autopartes.com.ar";
 $MAIL_PPEREZ = "pperez@grupo-autopartes.com.ar";
 $MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
+$MAIL_WSANCHEZ = "wsanchez@grupo-autopartes.com.ar";
+$MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
+$MAIL_JCARRIZO = "juanacarrizo@mipolrepuestos.com";
+$MAIL_FHOYOS = "fhoyos@mipolrepuestos.com";
+$MAIL_MDIP = "mdip@grupo-autopartes.com.ar";
+//$MAIL_DMEDINA = "mbaranello@mipolrepuestos.com";
 //$MAIL_DMEDINA = "dmedina@mipolrepuestos.com";
-$MAIL_DMEDINA = "mbaranello@mipolrepuestos.com";
+
 
 $ENCARGADO_CC = "RAFAEL PAEZ";
 $ENCARGADO_SGO = "MATIAS MARCUCCI";

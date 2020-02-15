@@ -21,7 +21,7 @@ require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php")
 $grupo_dep1 = "45,46";	//Dep Los Pocitos, Suc Autopartes
 $grupo_dep2 = "1,6,30";	//Dep CC, BRS, JBJ
 $grupo_dep3 = "5";		//Concep
-$grupo_dep4 = "2,7";	// Dep Sgo, LB
+$grupo_dep4 = "2,7";	//Dep Sgo, LB
 $grupo_dep5 = "3,40";   //Dep Jujuy, Salta
 $grupo_dep6 = "8,36";   //Dep Catam, Mendoza
 
@@ -45,7 +45,8 @@ $Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"S
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
-$enlace = mysqli_connect ( "192.168.0.155", "mipoldb", "mipol123", "fc" );
+#$enlace = mysqli_connect ( "192.168.0.155", "mipoldb", "mipol123", "fc" );
+$enlace = mysqli_connect ( "192.168.0.157", "root", "", "fc" );
 
 mysqli_query ( $enlace, "SET NAMES 'utf8'");
 
@@ -452,10 +453,10 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$mail->Body = $body;
 
 	$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
-	$mail->addCC($MAILCC_RETONDO);
-	$mail->AddAddress($MAIL_FHOYOS);
-	$mail->AddAddress($MAIL_MDIP);
-	$mail->AddAddress($MAILSAMMY);
+	#$mail->addCC($MAILCC_RETONDO);
+	#$mail->AddAddress($MAIL_FHOYOS);
+	#$mail->AddAddress($MAIL_MDIP);
+	#$mail->AddAddress($MAILSAMMY);
 	$mail->AddBCC($MAILTEST);
 	$mail->AddAttachment( $DIRHOME . 'Compras.xlsx', 'Compras.xlsx' );
 
@@ -484,7 +485,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 			INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 			INNER JOIN prd ON prd.prd_id = detpve.prd_id
 			INNER JOIN pdvs ON pdvs.solpsuc_id = pve.pve_id AND pdvs.solpsuc_suc = pve.pve_suc
-			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 9;";
+			WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = 1;";
 			
 			$Pve_suc_1 = mysqli_query($enlace, $Query_Pve_Suc_1);
 			echo mysqli_num_rows($Pve_suc_1) . "\n";
@@ -492,50 +493,64 @@ for( $a = 1 ; $a <= 12; $a++ )
 			if (mysqli_num_rows($Pve_suc_1)>0)
 			{
 				$body = "";
-
+				
+				#-- Encabezado del archivo csv
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 				$Suc1_file = fopen($DIRHOME.'Suc1.csv',"w");
 				fwrite($Suc1_file, $Datos);
-			
+
+				#-- Armo variable con datos de la Tabla para el cuerpo del mensaje.
+				$tabla = '<table border="1">';
+				$tabla .= '<thead>';
+				$tabla .= '<tr>';
+				$tabla .= '<th> Cantidad </th>';
+				$tabla .= '<th> Prd_id </th>';
+				$tabla .= '<th> CodAlfa </th>';
+				$tabla .= '<th> Articulo </th>';
+				$tabla .= '</tr>';
+				$tabla .= '</thead>';
+				$tabla .= '<tbody>';
+
 				while ($reg_suc_1 = mysqli_fetch_array ($Pve_suc_1))
 				{
 					//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 					$reg1 = $reg_suc_1['cantidad'].",".$reg_suc_1['prd_id'].",\"".$reg_suc_1['prd_codalfa']."\",\"".$reg_suc_1['prd_detanterior']."\"\r\n";
 					fwrite($Suc1_file, $reg1);
 
+					$tabla .= '<td>'. $reg_suc_1['cantidad']."</td><td>".$reg_suc_1['prd_id']."</td><td>".$reg_suc_1['prd_codalfa']."</td><td>".$reg_suc_1['prd_detanterior']."</td>";
+					$tabla .= '</tr>';
+
 					$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc_1['pve_id'] ." AND pve_suc=". $reg_suc_1['pve_suc'] ." AND prd_id=". $reg_suc_1['prd_id'] .";";
 					$Mod_reg = mysqli_query($enlace, $Modificar_reg);
 				}
-			
+
+				$tabla .= '</tbody></table>';
+
 				fclose($Suc1_file);
 				
 				CSVToExcelConverter::convert( $DIRHOME . 'Suc1.csv', $DIRHOME . 'Suc1.xlsx');
 
-				$cabeceras = 'MIME-Version: 1.0' . "\r\n";
-				$cabeceras .= 'Content-type: text/html; charset=utf-8' . "\r\n"; 
+				$mail->addCustomHeader('X-custom-header: custom-value');
+    
+    			//Content
+    			$mail->isHTML(true); 
 
-				$mail->header($cabeceras);
+				$body = "<p>Estimado <b>" .$ENCARGADO_CC. "</b></p>";
+				$body .= "<p>Saludos y buen día.</p>";
+				$body .= "<p>Se adjunta un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.</p>";
+				$body .= "<p>Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad requerida de los articulos solicitados para resolver los pedidos pendientes.</p>";
+				$body .= "<p>Muchas gracias por su gestión.</p>";
+				$body .= "<p>Saludos</p>";
 
 				$mensaje = '<html>'.
-				'<head><title>Email con HTML</title></head>'.
-				'<body><h1>Email con HTML</h1>'.
-				'Esto es un email que se envía en el formato HTML'.
+				'<head><title>LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE - CC</title></head>'.
+				'<body><h1>Listado de Productos Solicitados</h1>'.
+				$body.
 				'<hr>'.
-				'Enviado por mi programa en PHP'.
+				'<br>'.
+				$tabla.
 				'</body>'.
 				'</html>';
-
-
-				$body = "Estimado " .$ENCARGADO_CC. "\r\n";
-				$body .= "Saludos y buen día.\r\n";
-				//$body .= "En la sucursal ".$SUCURSAL_CC." con fecha de FECHA PEDIDO se ha realizado el pedido de venta NÚMERO DE PEDIDO por el CÓDIGO ALFA que usted tiene CANTIDAD en la sucursal y necesitamos enviarlo al cliente NOMBRE DEL CLIENTE a la brevedad.\r\n";
-				$body .= "Se Adjunto un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.\r\n";
-				//$body .= "Una revisión de los últimos movimientos del producto CÓDIGO ALFA nos muestra que la Sucursal NOMBRE DE LA SUCURSAL es la que menos rotación tiene, la fecha del último movimiento fue FECHA ÚLTIMO MOVIMIENTO.\r\n";
-				$body .= "Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad pedida anteriormente de los articulos solicitados para resolver los pedido pendientes.\r\n";
-				$body .= "Muchas gracias por la gestión.\r\n";
-				//$body .= "NOMBRE ENCARGADO SUCURSAL QUE PIDE EL PRODUCTO\r\n";
-				$body .= "Saludos\r\n";
-				
 				
 				$mail->Body = $mensaje;
 			
@@ -544,8 +559,12 @@ for( $a = 1 ; $a <= 12; $a++ )
 				$mail->AddAddress($MAIL_JCARRIZO);
 				$mail->AddCC($MAILSAMMY);
 				$mail->AddAddress($MAIL_FHOYOS);
-				$mail->AddAddress($MAIL_MDIP); */
-				$mail->AddBCC($MAILTEST);
+				$mail->AddAddress($MAIL_MDIP); 
+				$mail->AddBCC($MAILTEST);*/
+				$mail->AddAddress($MAILTEST);
+				$mail->AddCC($MAILSAMMY);
+
+				$mail->ConfirmReadingTo = "baranellom@gmail.com";
 
 				$mail->AddAttachment ( $DIRHOME . 'Suc1.xlsx', 'Suc1.xlsx' );
 			
