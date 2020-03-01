@@ -7,6 +7,14 @@
 #-- Pc de Casa
 $DIRHOME = "D:/Proyectos-Programacion/VisualStudioCode/Agentes-Mipol/";
 
+include ($DIRHOME . "phpmailer/class.phpmailer.php");
+include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel.php");
+require_once ($DIRHOME . "CSVToExcelConverter.php");
+require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Style/Alignment.php");
+// require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/CSV.php");
+
 $MAILSISTEMA = "sistema@mipolrepuestos.com";
 $MAILTEST = "mbaranello@mipolrepuestos.com";
 $MAILSAMMY = "sammy.moreno@microsolutions.cl";
@@ -68,7 +76,8 @@ $SUCURSAL_SALTA = "SUCURSAL SALTA";
 
 function convertir_CSV_XLS( $file_csv , $file_xls )
 {
-    $extension = pathinfo( "D:/ProyectosVariosMipol/Agentes-Mipol/" . $file_csv, PATHINFO_EXTENSION);
+    #$extension = pathinfo( "D:/ProyectosVariosMipol/Agentes-Mipol/" . $file_csv, PATHINFO_EXTENSION);
+    $extension = pathinfo( $DIRHOME . $file_csv, PATHINFO_EXTENSION);
     
     echo $extension;
     
