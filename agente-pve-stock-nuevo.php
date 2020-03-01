@@ -252,7 +252,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 				#-- Encabezado del archivo csv
 				$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 				$Suc1_file = fopen($DIRHOME.'Suc1.csv',"w");
-0				fwrite($Suc1_file, $Datos);
+				fwrite($Suc1_file, $Datos);
 
 				#-- Armo variable con datos de la Tabla para el cuerpo del mensaje.
 				$tabla = '<table border="1">';
