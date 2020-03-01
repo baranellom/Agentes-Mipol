@@ -19,6 +19,26 @@ require_once 'agente-pve-stock-plus.php';
 // $grupo_dep6 = "8,36";   //Dep Catam, Mendoza
 
 $Grupo_deps = array (1 => "45,46", 2 => "1,6,30", 3 => "5", 4 => "2,7", 5 => "3,40", 6 => "8,36");
+$Sucursales = array (
+    "CC" => array("suc_id" => 1, "dep_id" => 1),
+    "SGO" => array("suc_id" => 2, "dep_id" => 2),
+    "JUJUY" => array("suc_id" => 3, "dep_id" => 3),
+    "CONCEP" => array("suc_id" => 5, "dep_id" => 5),
+    "BRS" => array("suc_id" => 6, "dep_id" => 6),
+    "LB" => array("suc_id" => 7, "dep_id" => 7),
+    "MEND" => array("suc_id" => 8, "dep_id" => 8),
+    "GA" => array("suc_id" => 9, "dep_id" => 46),
+    "JBJ" => array("suc_id" => 10, "dep_id" => 30),
+    "CAT" => array("suc_id" => 11, "dep_id" => 36),
+    "SALTA" => array("suc_id" => 12, "dep_id" => 40),
+    "LP" => array("suc_id" => 15, "dep_id" => 45)
+);
+
+// print_r($Sucursales);
+// print_r(count($Sucursales));
+// print_r($Sucursales['LP']['suc_id']);
+
+// exit();
 
 $resuelto = false;
 
@@ -223,8 +243,14 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	mysqli_free_result ( $Pve_compras );
 }
 
+// print_r(count($Sucursales)); 12
+// print_r($Sucursales['LP']['suc_id']);
+
+$a = 1;
+
 //Empiezo a enviar Mail a Sucursales para que repongan Articulos a GA
-for( $a = 1 ; $a <= 12; $a++ )
+while ($a <= count($Sucursales)):
+//for( $a = 1 ; $a <= 12; $a++ )
 {
 	$mail->clearAttachments();
 	$mail->clearBCCs();
@@ -232,7 +258,7 @@ for( $a = 1 ; $a <= 12; $a++ )
 	$mail->clearAddresses();
 	$mail->Body = "";
 	$mail->Subject = "";
-
+    
  	switch ($a) 
   	{
 		case 1:
