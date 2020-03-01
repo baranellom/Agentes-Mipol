@@ -60,7 +60,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve)):
     
     $l = 1;
     
-    #-- Armo consultas para averiguar Stock en los distintos grupos y las guardo en una Variable Array $ConsultaStock_Suc_Grupo
+    #-- Armo consultas para averiguar Stock en los distintos grupos y las guardo en una Variable Array $ConsultaStock_Suc_Grupo y $Stock_grupo
     while ($l <= $cant_grupos):
         
         $ConsultaStock_Suc_Grupo[$l] = "SELECT r_dpt_prd.prd_id, prd.prd_codalfa, FC_Division_Det(prd.fliaprd_id) as Division, LEFT(REPLACE(REPLACE(prd.prd_detanterior,'(-SU)',''),'-  -',''),256) AS Detalle, 
@@ -87,7 +87,7 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve)):
         INNER JOIN prd ON prd.prd_id = stock_mp.prd_id AND prd.prd_id = r_dpt_prd.prd_id
         WHERE stock_mp.stock > 0 /*Con Stock positivo*/ AND r_dpt_prd.dpt_id IN (".$Grupo_deps[$l].") AND prd.prd_id = ".$art_pve['prd_id']." ORDER BY 14 ASC;";
 
-        #-- Ejecuto las consultas para los grupos, los cuales seran comparados luego, a los Stocks los guardo en un arreglo
+        #-- Ejecuto las consultas para los grupos, los cuales seran comparados luego, a los Stocks; los guardo en un arreglo
         $Stock_grupo[$l] = mysqli_query ( $enlace, $ConsultaStock_Suc_Grupo[$l] ); 
 
         $l++;
@@ -125,14 +125,14 @@ while ($art_pve = mysqli_fetch_array($Articulos_pve)):
 
     endwhile;
 
+    #-- Si al final el producto no es encontrado en los depositos de Sucursal, se lo enviara a Compras para que lo busquen
     if ($resuelto == false):
         echo "Pido a Proveedores, Envio mail a Facundo x el producto id = ".$art_pve['prd_id']." \n";
         echo "Este producto es necesitado por la Suc ". $art_pve['pve_suc']. "\n";
         echo "Marco Producto PVE en tabla detpve como enviado a Compras \n";
         $Modificar_registro = "UPDATE detpve SET detpve_destmail='Compras', detpve_sucmail='', detpve_cant_solicitada='". $art_pve['cantidad'] ."', detpve_mailenviado='0' WHERE pve_id=". $art_pve['pve_id'] ." AND pve_suc=". $art_pve['pve_suc'] ." AND prd_id=". $art_pve['prd_id'] ." LIMIT 1;". "\n";
-        echo $Modificar_registro;
-
         $Mod_reg = mysqli_query($enlace, $Modificar_registro);
+
 	endif;
 	
 endwhile;
@@ -223,7 +223,7 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	mysqli_free_result ( $Pve_compras );
 }
 
-//Empiezo a enviar Mail a Sucursales
+//Empiezo a enviar Mail a Sucursales para que repongan Articulos a GA
 for( $a = 1 ; $a <= 12; $a++ )
 {
 	$mail->clearAttachments();
