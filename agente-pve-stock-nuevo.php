@@ -20,25 +20,25 @@ require_once 'agente-pve-stock-plus.php';
 
 $Grupo_deps = array (1 => "45,46", 2 => "1,6,30", 3 => "5", 4 => "2,7", 5 => "3,40", 6 => "8,36");
 $Sucursales = array (
-    1 => array("suc_det" => "CASA CENTRAL", "suc_id" => 1, "dep_id" => 1),
-    2 => array("suc_det" => "SANTIAGO", "suc_id" => 2, "dep_id" => 2),
-    3 => array("suc_det" => "JUJUY", "suc_id" => 3, "dep_id" => 3),
-    4 => array("suc_det" => "CONCEPCION", "suc_id" => 5, "dep_id" => 5),
-    5 => array("suc_det" => "BR SALI", "suc_id" => 6, "dep_id" => 6),
-    6 => array("suc_det" => "LA BANDA", "suc_id" => 7, "dep_id" => 7),
-    7 => array("suc_det" => "MENDOZA", "suc_id" => 8, "dep_id" => 8),
-    8 => array("suc_det" => "GA", "suc_id" => 9, "dep_id" => 46),
-    9 => array("suc_det" => "JB JUSTO", "suc_id" => 10, "dep_id" => 30),
-    10 => array("suc_det" => "CATAMARCA", "suc_id" => 11, "dep_id" => 36),
-    11 => array("suc_det" => "SALTA", "suc_id" => 12, "dep_id" => 40),
-    12 => array("suc_det" => "LP", "suc_id" => 15, "dep_id" => 45)
+    1 => array("suc_det" => "CASA CENTRAL", "suc_id" => 1, "dep_id" => 1, "encargado" => "RAFAEL PAEZ"),
+    2 => array("suc_det" => "SANTIAGO", "suc_id" => 2, "dep_id" => 2, "encargado" => "MATIAS MARCUCCI"),
+    3 => array("suc_det" => "JUJUY", "suc_id" => 3, "dep_id" => 3, "encargado" => "RODRIGO RAMOS"),
+    4 => array("suc_det" => "CONCEPCION", "suc_id" => 5, "dep_id" => 5, "encargado" => "IVAN GROSSO"),
+    5 => array("suc_det" => "BR SALI", "suc_id" => 6, "dep_id" => 6, "encargado" => "EDUARDO MEDRANO"),
+    6 => array("suc_det" => "LA BANDA", "suc_id" => 7, "dep_id" => 7, "encargado" => "TRISTAN VITALE"),
+    7 => array("suc_det" => "MENDOZA", "suc_id" => 8, "dep_id" => 8, "encargado" => "HERNAN HERRERA"),
+    8 => array("suc_det" => "GA", "suc_id" => 9, "dep_id" => 46, "encargado" => "MARCELO MORENO"),
+    9 => array("suc_det" => "JB JUSTO", "suc_id" => 10, "dep_id" => 30, "encargado" => "LEONARDO YMOLA"),
+    10 => array("suc_det" => "CATAMARCA", "suc_id" => 11, "dep_id" => 36, "encargado" => "PAUL TREJO"),
+    11 => array("suc_det" => "SALTA", "suc_id" => 12, "dep_id" => 40, "encargado" => "LEONARDO DIAZ"),
+    12 => array("suc_det" => "LP", "suc_id" => 15, "dep_id" => 45, "encargado" => "WALTER CORONEL")
 );
 
 // print_r($Sucursales);
 // print_r(count($Sucursales));
 // print_r($Sucursales[12]['suc_id']);
 
-//exit();
+// exit();
 
 $resuelto = false;
 
@@ -159,31 +159,7 @@ endwhile;
 
 //exit();
 
-// $mail = new PHPMailer ( true );
-
-// $mail->SetLanguage('es', $DIRHOME . 'phpmailer/language/');
-
-// $mail->IsSMTP ();
-
-// // Activa la condificacción utf-8
-// $mail->CharSet = 'UTF-8';
-
-// $mail->SMTPAuth = true;
-
-// $mail->SMTPDebug = 2;
-
-// $mail->Host = "mailen3.cloudsector.net";
-
-// $mail->Port = 587;
-
-// $mail->Username = "sistema@mipolrepuestos.com";
-
-// $mail->Password = "Abc$4321";
-
-// $mail->SetFrom ( $MAILSISTEMA );
-
-// $mail->FromName = "Servidor Linux de Mipol Repuestos SA";
-
+#-- Limpio variables para el envio de mails
 $mail->clearAttachments();
 $mail->clearBCCs();
 $mail->clearCCs();
@@ -229,11 +205,14 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 	$mail->Body = $body;
 
 	$mail->Subject = "LISTADO DE PRODUCTOS QUE DEBEN COMPRARSE PARA RESOLVER PVE";
-	#$mail->addCC($MAILCC_RETONDO);
-	#$mail->AddAddress($MAIL_FHOYOS);
-	#$mail->AddAddress($MAIL_MDIP);
-	#$mail->AddAddress($MAILSAMMY);
+
+	for($x = 0; $x < count($MAILCOMPRAS); $x++) 
+	{
+		$mail->addAddress($MAILCOMPRAS[$x]);
+	}
+	
 	$mail->AddBCC($MAILTEST);
+
 	$mail->AddAttachment( $DIRHOME . 'Compras.xlsx', 'Compras.xlsx' );
 
 	$mail->Send ();
@@ -243,9 +222,6 @@ if (mysqli_num_rows($Pve_compras = mysqli_query($enlace, $Query_Pve_compras)) > 
 
 	mysqli_free_result ( $Pve_compras );
 }
-
-// print_r(count($Sucursales)); 12
-// print_r($Sucursales['LP']['suc_id']);
 
 $a = 1;
 
@@ -259,11 +235,15 @@ while ($a <= count($Sucursales)):
 	WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail = 'Sucursal' 
 	AND detpve.detpve_mailenviado = 0 AND detpve.detpve_sucmail = ".$Sucursales[$a]['suc_id'].";";
 	
+	print_r($Query_Pve_Suc[$a]);
+
+	#-- Consulto en base de datos
 	$Pve_suc[$a] = mysqli_query($enlace, $Query_Pve_Suc[$a]);
 	echo mysqli_num_rows($Pve_suc[$a]) . "\n";
 
 	if (mysqli_num_rows($Pve_suc[$a])>0)
 	{
+		#-- Limpio Variables
 		$mail->clearAttachments();
 		$mail->clearBCCs();
 		$mail->clearCCs();
@@ -275,11 +255,13 @@ while ($a <= count($Sucursales)):
 		
 		#-- Encabezado del archivo csv
 		$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
+		#-- Abro archivo csv
 		$Suc_file[$a] = fopen($DIRHOME.'Suc'.$Sucursales[$a]['suc_id'].'.csv',"w");
+		#-- Guardo linea de Encabezado en archivo csv
 		fwrite($Suc_file[$a], $Datos);
 
 		#-- Armo variable con datos de la Tabla para el cuerpo del mensaje.
-		$tabla = '<table border="1">';
+		$tabla = '<table border="1" cellpadding="2" cellspacing="0">';
 		$tabla .= '<thead>';
 		$tabla .= '<tr>';
 		$tabla .= '<th> Cantidad </th>';
@@ -314,7 +296,7 @@ while ($a <= count($Sucursales)):
 		//Content
 		$mail->isHTML(true); 
 
-		$body = "<p>Estimado <b>" .$ENCARGADO_CC. "</b></p>";
+		$body = "<p>Estimado <b>".$Sucursales[$a]['encargado']."</b></p>";
 		$body .= "<p>Saludos y buen día.</p>";
 		$body .= "<p>Se adjunta un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.</p>";
 		$body .= "<p>Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad requerida de los articulos solicitados para resolver los pedidos pendientes.</p>";
@@ -322,7 +304,7 @@ while ($a <= count($Sucursales)):
 		$body .= "<p>Saludos</p>";
 
 		$mensaje = '<html>'.
-		'<head><title>LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE - CC</title></head>'.
+		'<head><title>LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE - '.$Sucursales[$a]['suc_det'].'</title></head>'.
 		'<body><h1>Listado de Productos Solicitados</h1>'.
 		$body.
 		'<hr>'.
@@ -333,15 +315,14 @@ while ($a <= count($Sucursales)):
 		
 		$mail->Body = $mensaje;
 	
-		$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - CC";
-		/* $mail->AddAddress($MAILCC_RETONDO);
-		$mail->AddAddress($MAIL_JCARRIZO);
-		$mail->AddCC($MAILSAMMY);
-		$mail->AddAddress($MAIL_FHOYOS);
-		$mail->AddAddress($MAIL_MDIP); 
-		$mail->AddBCC($MAILTEST);*/
-		$mail->AddAddress($MAILTEST);
-		//$mail->AddCC($MAILSAMMY);
+		$mail->Subject = "LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE'S - ".$Sucursales[$a]['suc_det'];
+
+		for($x = 0; $x < count($MAILSUCURSALES[$a]); $x++) 
+	{
+		$mail->addAddress($MAILSUCURSALES[$a][$x]);
+	}
+
+		$mail->AddBCC($MAILTEST);
 
 		$mail->ConfirmReadingTo = "baranellom@gmail.com";
 

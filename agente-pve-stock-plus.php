@@ -1,11 +1,11 @@
 <?php
 
 #-- Linux 156
-//$DIRHOME="/usr/share/Alertas/";
+#$DIRHOME="/usr/share/Alertas/";
 #-- Pc Oficina
 $DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
 #-- Pc de Casa
-//$DIRHOME = "D:/Proyectos-Programacion/VisualStudioCode/Agentes-Mipol/";
+#$DIRHOME = "D:/Proyectos-Programacion/VisualStudioCode/Agentes-Mipol/";
 
 include ($DIRHOME . "phpmailer/class.phpmailer.php");
 include_once ($DIRHOME . "phpmailer/PHPMailerAutoload.php");
@@ -18,6 +18,25 @@ require_once ($DIRHOME . "PHPExcel-1.8.2/Classes/PHPExcel/Writer/Excel2007.php")
 $MAILSISTEMA = "sistema@mipolrepuestos.com";
 $MAILTEST = "mbaranello@mipolrepuestos.com";
 $MAILSAMMY = "sammy.moreno@microsolutions.cl";
+
+$MAILCOMPRAS = array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com");
+
+$MAILSUCURSALES = array (
+    1 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","juanacarrizo@mipolrepuestos.com","rpaez@mipolrepuestos.com"),
+    2 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mmarcucci@mipolrepuestos.com"),
+    3 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","rramos@mipolrepuestos.com"),
+    4 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolconcep@mipolrepuestos.com"),
+    5 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolbrs@mipolrepuestos.com"),
+    6 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipol-labanda@mipolrepuestos.com"),
+    7 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolmendoza@mipolrepuestos.com"),
+    8 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mmoreno@grupo-autopartes.com.ar"),
+    9 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipoljbjusto@mipolrepuestos.com"),
+    10 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","pgrosso@grupo-autopartes.com.ar"),
+    11 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","ldiaz@grupo-autopartes.com.ar"),
+    12 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com")
+);
+
+
 $MAILCC_PAEZ = "rpaez@mipolrepuestos.com";
 $MAILCC_RETONDO = "dretondo@mipolrepuestos.com";
 $MAILCC_TEK = "jtek@mipolrepuestos.com";
