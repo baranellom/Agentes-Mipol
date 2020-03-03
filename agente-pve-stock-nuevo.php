@@ -282,18 +282,22 @@ while ($a <= count($Sucursales)):
 
 		$body = "<p>Estimado <b>".$Sucursales[$a]['encargado']."</b></p>";
 		$body .= "<p>Saludos y buen día.</p>";
-		$body .= "<p>Se adjunta un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.</p>";
-		$body .= "<p>Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad requerida de los articulos solicitados para resolver los pedidos pendientes.</p>";
-		$body .= "<p>Muchas gracias por su gestión.</p>";
-		$body .= "<p>Saludos</p>";
+		$body .= "<p>El siguiente es un listado de Artículos que debe enviar al Operador Logistico para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.</p>";
+		//$body .= "<p>Se adjunta un archivo con el/los productos que el Operador Logistico necesita para resolver los Pedidos de Ventas Especiales del resto de las Sucursales.</p>";
+		//$body .= "<p>Por favor, generar un remito a GRUPO AUTOPARTES OPERADOR LOGÍSTICO por la cantidad requerida de los articulos solicitados para resolver los pedidos pendientes.</p>";
+		$body .= "<p>Por favor generar un remito a la brevedad.</p>";
+		$body2 = "<p>Muchas gracias por su gestión.</p>";
+		$body2 .= "<p>Saludos</p>";
 
 		$mensaje = '<html>'.
 		'<head><title>LISTADO DE PRODUCTOS SOLICITADOS PARA RESOLVER PVE - '.$Sucursales[$a]['suc_det'].'</title></head>'.
 		'<body><h1>Listado de Productos Solicitados</h1>'.
 		$body.
-		'<hr>'.
-		'<br>'.
+		//'<hr>'.
+		//'<br>'.
 		$tabla.
+		'<br>'.
+		$body2.
 		'</body>'.
 		'</html>';
 		
@@ -308,9 +312,10 @@ while ($a <= count($Sucursales)):
 	}
 		$mail->AddBCC($MAILTEST);
 
-		$mail->ConfirmReadingTo = "baranellom@gmail.com";
+		$mail->ConfirmReadingTo = "sammy.moreno@microsolutions.cl";
+		//"baranellom@gmail.com";
 
-		$mail->AddAttachment ( $DIRHOME . 'Suc'.$Sucursales[$a]['suc_id'].'.xlsx', 'Suc'.$Sucursales[$a]['suc_id'].'.xlsx' );
+		// $mail->AddAttachment ( $DIRHOME . 'Suc'.$Sucursales[$a]['suc_id'].'.xlsx', 'Suc'.$Sucursales[$a]['suc_id'].'.xlsx' );
 	
 		$mail->Send ();
 	
