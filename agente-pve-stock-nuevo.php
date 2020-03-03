@@ -19,30 +19,13 @@ require_once 'agente-pve-stock-plus.php';
 // $grupo_dep6 = "8,36";   //Dep Catam, Mendoza
 
 $Grupo_deps = array (1 => "45,46", 2 => "1,6,30", 3 => "5", 4 => "2,7", 5 => "3,40", 6 => "8,36");
-$Sucursales = array (
-    1 => array("suc_det" => "CASA CENTRAL", "suc_id" => 1, "dep_id" => 1, "encargado" => "RAFAEL PAEZ"),
-    2 => array("suc_det" => "SANTIAGO", "suc_id" => 2, "dep_id" => 2, "encargado" => "MATIAS MARCUCCI"),
-    3 => array("suc_det" => "JUJUY", "suc_id" => 3, "dep_id" => 3, "encargado" => "RODRIGO RAMOS"),
-    4 => array("suc_det" => "CONCEPCION", "suc_id" => 5, "dep_id" => 5, "encargado" => "IVAN GROSSO"),
-    5 => array("suc_det" => "BR SALI", "suc_id" => 6, "dep_id" => 6, "encargado" => "EDUARDO MEDRANO"),
-    6 => array("suc_det" => "LA BANDA", "suc_id" => 7, "dep_id" => 7, "encargado" => "TRISTAN VITALE"),
-    7 => array("suc_det" => "MENDOZA", "suc_id" => 8, "dep_id" => 8, "encargado" => "HERNAN HERRERA"),
-    8 => array("suc_det" => "GA", "suc_id" => 9, "dep_id" => 46, "encargado" => "MARCELO MORENO"),
-    9 => array("suc_det" => "JB JUSTO", "suc_id" => 10, "dep_id" => 30, "encargado" => "LEONARDO YMOLA"),
-    10 => array("suc_det" => "CATAMARCA", "suc_id" => 11, "dep_id" => 36, "encargado" => "PAUL TREJO"),
-    11 => array("suc_det" => "SALTA", "suc_id" => 12, "dep_id" => 40, "encargado" => "LEONARDO DIAZ"),
-    12 => array("suc_det" => "LP", "suc_id" => 15, "dep_id" => 45, "encargado" => "WALTER CORONEL")
-);
 
 // print_r($Sucursales);
 // print_r(count($Sucursales));
 // print_r($Sucursales[12]['suc_id']);
-
 // exit();
 
 $resuelto = false;
-
-//$Stocks = array (1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0);
 
 $i = 0;
 
@@ -57,8 +40,8 @@ $Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"S
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
-#$enlace = mysqli_connect ( "192.168.0.155", "mipoldb", "mipol123", "fc" );
-$enlace = mysqli_connect ( "192.168.0.157", "root", "", "fc" );
+$enlace = mysqli_connect ( "192.168.0.155", "mipoldb", "mipol123", "fc" );
+// $enlace = mysqli_connect ( "192.168.0.157", "root", "", "fc" );
 
 mysqli_query ( $enlace, "SET NAMES 'utf8'");
 
@@ -228,6 +211,7 @@ $a = 1;
 //Empiezo a enviar Mail a Sucursales para que repongan Articulos a GA
 while ($a <= count($Sucursales)):
 
+	#-- Creo consulta para averiguar que registros fueron marcados para el envio a Sucursales y no fueron enviados
 	$Query_Pve_Suc[$a] = "SELECT * FROM pve 
 	INNER JOIN detpve ON pve.pve_id = detpve.pve_id AND pve.pve_suc = detpve.pve_suc
 	INNER JOIN prd ON prd.prd_id = detpve.prd_id
@@ -239,7 +223,7 @@ while ($a <= count($Sucursales)):
 
 	#-- Consulto en base de datos
 	$Pve_suc[$a] = mysqli_query($enlace, $Query_Pve_Suc[$a]);
-	echo mysqli_num_rows($Pve_suc[$a]) . "\n";
+	echo " - Cantidad de Productos: ". mysqli_num_rows($Pve_suc[$a]) . "\n";
 
 	if (mysqli_num_rows($Pve_suc[$a])>0)
 	{
@@ -255,7 +239,7 @@ while ($a <= count($Sucursales)):
 		
 		#-- Encabezado del archivo csv
 		$Datos = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
-		#-- Abro archivo csv
+		#-- Abro / Genero archivo csv
 		$Suc_file[$a] = fopen($DIRHOME.'Suc'.$Sucursales[$a]['suc_id'].'.csv',"w");
 		#-- Guardo linea de Encabezado en archivo csv
 		fwrite($Suc_file[$a], $Datos);
@@ -272,14 +256,14 @@ while ($a <= count($Sucursales)):
 		$tabla .= '</thead>';
 		$tabla .= '<tbody>';
 
+		#-- Mientras existan registros marcados para enviar a la Suc $a hacer esto:
 		while ($reg_suc[$a] = mysqli_fetch_array ($Pve_suc[$a]))
 		{
 			//$reg = "\"Cantidad\",\"Prd_id\",\"CodAlfa\",\"Articulo\"\r\n";
 			$reg[$a] = $reg_suc[$a]['cantidad'].",".$reg_suc[$a]['prd_id'].",\"".$reg_suc[$a]['prd_codalfa']."\",\"".$reg_suc[$a]['prd_detanterior']."\"\r\n";
 			fwrite($Suc_file[$a], $reg[$a]);
 
-			$tabla .= '<td>'. $reg_suc[$a]['cantidad']."</td><td>".$reg_suc[$a]['prd_id']."</td><td>".$reg_suc[$a]['prd_codalfa']."</td><td>".$reg_suc[$a]['prd_detanterior']."</td>";
-			$tabla .= '</tr>';
+			$tabla .= '<tr><td>'. $reg_suc[$a]['cantidad']."</td><td>".$reg_suc[$a]['prd_id']."</td><td>".$reg_suc[$a]['prd_codalfa']."</td><td>".$reg_suc[$a]['prd_detanterior']."</td></tr>";
 
 			$Modificar_reg = "UPDATE detpve SET detpve_mailenviado=1 WHERE pve_id=". $reg_suc[$a]['pve_id'] ." AND pve_suc=". $reg_suc[$a]['pve_suc'] ." AND prd_id=". $reg_suc[$a]['prd_id'] .";";
 			$Mod_reg = mysqli_query($enlace, $Modificar_reg);
@@ -320,8 +304,8 @@ while ($a <= count($Sucursales)):
 		for($x = 0; $x < count($MAILSUCURSALES[$a]); $x++) 
 	{
 		$mail->addAddress($MAILSUCURSALES[$a][$x]);
+		print_r($MAILSUCURSALES[$a][$x]);
 	}
-
 		$mail->AddBCC($MAILTEST);
 
 		$mail->ConfirmReadingTo = "baranellom@gmail.com";
@@ -330,7 +314,7 @@ while ($a <= count($Sucursales)):
 	
 		$mail->Send ();
 	
-		unlink ( $DIRHOME . 'Suc'.$Sucursales[$a]['suc_id'].'.csv' );
+		unlink ( $DIRHOME . 'Suc'.$Sucursales[$a]['suc_id'].'.csv');
 		unlink ( $DIRHOME . 'Suc'.$Sucursales[$a]['suc_id'].'.xlsx');
 
 		mysqli_free_result ( $Pve_suc[$a] );
