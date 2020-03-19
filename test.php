@@ -2,22 +2,18 @@
 
 <?php
 
+$token = 'gl4gpkwtdysux61ymbfznwavekp5hlkq';
+  
+$requestUrl = 'http://http://34.82.252.252/index.php/rest/V1/products/';
 
-$MAILSUCURSALES = array (
-    1 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","juanacarrizo@mipolrepuestos.com","rpaez@mipolrepuestos.com"),
-    2 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mmarcucci@mipolrepuestos.com"),
-    3 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","rramos@mipolrepuestos.com"),
-    4 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolconcep@mipolrepuestos.com"),
-    5 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolbrs@mipolrepuestos.com"),
-    6 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipol-labanda@mipolrepuestos.com"),
-    7 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipolmendoza@mipolrepuestos.com"),
-    8 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mmoreno@grupo-autopartes.com.ar"),
-    9 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","mipoljbjusto@mipolrepuestos.com"),
-    10 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","pgrosso@grupo-autopartes.com.ar"),
-    11 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com","ldiaz@grupo-autopartes.com.ar"),
-    12 => array("fhoyos@mipolrepuestos.com","mdip@grupo-autopartes.com.ar","sammy.moreno@microsolutions.cl","dretondo@mipolrepuestos.com","wgallardo@mipolrepuestos.com")
-);
+$headers = array("Authorization: Bearer $token");
+ 
+$ch = curl_init($requestUrl);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$result = curl_exec($ch);
+ 
+$result=  json_decode($result);
+print_r($result);
 
-print_r($MAILSUCURSALES[12]);
-print_r(count($MAILSUCURSALES[12]));
 ?>
