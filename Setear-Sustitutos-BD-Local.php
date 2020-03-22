@@ -3,11 +3,11 @@
 <?php
 
 #-- Linux 156
-#$DIRHOME="/usr/share/Alertas/";
+//$DIRHOME="/usr/share/Alertas/";
 #-- Pc Oficina
-$DIRHOME = "D:/FotosMagento/GeneralJPG/";
+//$DIRHOME = "D:/FotosMagento/GeneralJPG/";
 #-- Pc de Casa
-#$DIRHOME = "D:/FotosMagento/GeneralJPG";
+//$DIRHOME = "D:/FotosMagento/GeneralJPG";
 
 ##-- Consulta para obtener los productos que se subieron a Magento, para chequear la existencia del arhivo de imagen
 $Consulta_inicial = "SELECT sku, id_gestuc, fecha_up FROM articulos_magento ;";
@@ -61,6 +61,8 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 	endwhile;
 
 endwhile;
+
+echo "Proceso Finalizado.";
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );
