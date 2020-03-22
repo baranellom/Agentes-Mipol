@@ -62,7 +62,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
 endwhile;
 
-echo "Proceso Finalizado.";
+echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );

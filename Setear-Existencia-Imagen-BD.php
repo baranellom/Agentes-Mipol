@@ -39,7 +39,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 		#-- Chequeo que el archivo con el nombre de la imagen exista
 		if (file_exists($nombre_fichero)) 
 		{
-			echo "El fichero $nombre_fichero existe \n";
+			//echo "El fichero $nombre_fichero existe \n";
 
 			$Modificar_registro = "UPDATE articulos_magento SET existeimagen='1', fecha_up = now() WHERE sku='".$art_magento['sku']."' LIMIT 1;";
 
@@ -47,7 +47,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 		} 
 		else 
 		{
-			echo "El fichero $nombre_fichero no existe \n";
+			//echo "El fichero $nombre_fichero no existe \n";
 			
 			$Modificar_registro = "UPDATE articulos_magento SET existeimagen='0' WHERE sku='".$art_magento['sku']."' LIMIT 1;";
 
@@ -57,6 +57,8 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 	
 
 endwhile;
+
+echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );

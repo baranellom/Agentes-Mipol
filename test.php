@@ -36,4 +36,8 @@ for ($i=1; $i <= count($texto); $i++)
 
 print $ind;
 
+date_default_timezone_set('America/Argentina/Tucuman');
+
+echo date('d/m/Y H:i:s');
+
 ?>
