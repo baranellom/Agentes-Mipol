@@ -10,7 +10,7 @@ $DIRHOME = "D:/FotosMagento/GeneralJPG/";
 #$DIRHOME = "D:/FotosMagento/GeneralJPG";
 
 ##-- Consulta para obtener los productos que se subieron a Magento, para chequear la existencia del arhivo de imagen
-$Consulta_inicial = "SELECT sku, id_gestuc, fecha_up FROM articulos_magento ;";
+$Consulta_inicial = "SELECT sku, id_gestuc, fecha_up FROM articulos_magento WHERE articulos_magento.id_gestuc = 58;";
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
@@ -37,16 +37,29 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
     while ($Art_Sustitutos = mysqli_fetch_array($Sustitutos)):
 
-	if ( ! is_null($Art_Sustitutos['sustitutos']))
-	{
-		#-- Chequeo que el archivo con el nombre de la imagen exista
+	#-- if ( ! is_null($Art_Sustitutos['sustitutos'])) 	{
 		echo "Existen productos relacionados \n";
 
-		$Modificar_registro = "UPDATE articulos_magento SET related_skus='".$Art_Sustitutos['sustitutos']."' WHERE  sku='".$art_magento['sku']."' LIMIT 1;";
-        
-        $Mod_reg = mysqli_query($enlace, $Modificar_registro);
-	}
+		$ind = "";
 
+		$texto = explode(",", $Art_Sustitutos['sustitutos']);
+		print_r ($texto);
+
+		for ($i=1; $i <= count($texto); $i++)
+		{   
+			if ($i != count($texto))
+				$ind = $ind . ($i) . ',';
+			else
+				$ind = $ind . ($i);
+		}
+
+		print $ind;
+
+		$Modificar_registro = "UPDATE articulos_magento SET related_skus='".$Art_Sustitutos['sustitutos']."' , related_position ='".$ind."' WHERE sku='".$art_magento['sku']."' LIMIT 1;";
+		
+        $Mod_reg = mysqli_query($enlace, $Modificar_registro);
+	#-- }
+	endwhile;
 
 endwhile;
 
