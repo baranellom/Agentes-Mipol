@@ -2,9 +2,9 @@
 
 <?php
 
-$token = 'gl4gpkwtdysux61ymbfznwavekp5hlkq';
+$token = 'k2pris0urlucc3bc8k5tlutlnodbm9jj';
   
-$requestUrl = 'http://http://34.82.252.252/index.php/rest/V1/products/';
+$requestUrl = 'http://34.82.252.252/index.php/rest/V1/products/';
 
 $headers = array(
     'Content-Type: application/json',

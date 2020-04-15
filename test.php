@@ -2,42 +2,28 @@
 
 <?php
 
-/* $token = 'gl4gpkwtdysux61ymbfznwavekp5hlkq';
-  
-$requestUrl = 'http://http://34.82.252.252/index.php/rest/V1/products/';
+$api_url = 'http://34.82.252.252/index.php/rest/V1';
+$userData = array("username" => "mbaranello", "password" => "Carola123");
 
-$headers = array("Authorization: Bearer $token");
- 
-$ch = curl_init($requestUrl);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$result = curl_exec($ch);
- 
-$result=  json_decode($result);
-print_r($result); */
+$curl = curl_init($api_url . "/integration/admin/token");
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($userData));
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Content-Lenght: " . strlen(json_encode($userData))));
 
-$text= "31288,49151,144160,172089,173499,251829,252050,345718,350688";
-$ind = "";
+$token = curl_exec($curl);
 
-echo substr_count($text, ',');
+echo json_decode($token);
 
-echo "\n";
+//$curl = curl_init($api_url . "/store/websites");
+$curl = curl_init($api_url . "/products/103888-1");
+//$curl = curl_init($api_url . "/categories");
 
-$texto = explode(",", $text);
-print_r ($texto);
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
 
-for ($i=1; $i <= count($texto); $i++)
-{   
-    if ($i != count($texto))
-        $ind = $ind . ($i) . ',';
-    else
-        $ind = $ind . ($i);
-}
-
-print $ind;
-
-date_default_timezone_set('America/Argentina/Tucuman');
-
-echo date('d/m/Y H:i:s');
+$result = curl_exec($curl);
+print_r(json_decode($result));
 
 ?>
