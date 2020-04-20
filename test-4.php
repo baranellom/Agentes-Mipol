@@ -24,7 +24,7 @@ class Token  {
         $data_string = json_encode($data);
         
         $ch = curl_init();
-        curl_setopt($ch,CURLOPT_URL, $dir_token);
+        curl_setopt($ch, CURLOPT_URL, $dir_token);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -52,7 +52,7 @@ $headers = array('Content-Type:application/json','Authorization:Bearer '.$clave_
 $apiUrl = $url."/V1/products";
  
 
-$Consulta_inicial = "SELECT * FROM articulos_magento a WHERE a.related_skus != '' AND a.related_position = '1' LIMIT 2;";
+$Consulta_inicial = "SELECT * FROM articulos_magento a WHERE a.related_skus != '' AND a.related_position = '1';";
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
@@ -70,36 +70,19 @@ if (mysqli_connect_errno ()) {
 // Obtengo datos con la consulta anterior desde la Base de Datos
 $Articulos_magento = mysqli_query ( $enlace, $Consulta_inicial );
 
+#-- Inicia una nueva sesión y devuelve el manipulador curl para el uso de las funciones curl_setopt(), curl_exec(), y curl_close().
+$chp = curl_init();
+
 #-- Con los productos obtenidos chequeo existencia del Archivo en Directorio
 while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
     $data = [
         "product" => [
             "sku" => $art_magento["sku"],
-            //"name" => "Agua VMG VMG-BA682",
-            "attribute_set_id" => 4,
-            //"price" => 8164.92,
-            "status" => 1,
-            "visibility" => 4,
+            //"attribute_set_id" => 4,
+            //"status" => 1,
+            //"visibility" => 4,
             "type_id" => "simple",
-            //"weight" => "1",
-            //"extension_attributes" => [
-                //"category_links" => [
-                //      [
-                //          "position" => 0,
-                //          "category_id" => "66"
-                //      ]
-                      //[
-                      //"position" => 1,
-                      //"category_id" => "7"
-                      //]
-                //],
-                //"stock_item" => [
-                //        "qty" => "0",
-                //        "is_in_stock" => 1
-                //]
-            //],
-    
             "product_links" => [
                 [
                     "sku" => $art_magento["sku"],
@@ -142,22 +125,23 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
     ];
     $data_string = json_encode($data);
      
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL, $apiUrl);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    $response = curl_exec($ch);
+    //$ch = curl_init();
+    curl_setopt($chp,CURLOPT_URL, $apiUrl);
+    curl_setopt($chp, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($chp, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($chp, CURLOPT_RETURNTRANSFER, false);
+    curl_setopt($chp, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($chp, CURLOPT_HTTPHEADER, $headers);
+    $response = curl_exec($chp);
      
     $response = json_decode($response, TRUE);
     print_r($response);
-    echo "\r\n";
-    
+    echo "\r\nArticulo modificado. - " . date('d/m/Y H:i:s') . "\r\n";;
+        
 endwhile;
 
 curl_close($ch);
+curl_close($chp);
 
 echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 
