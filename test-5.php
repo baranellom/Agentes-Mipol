@@ -133,10 +133,12 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 endwhile;
 
 curl_close($chp);
-curl_close($ch);
+//curl_close($ch);
 
 
 echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );
+
+?>

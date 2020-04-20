@@ -132,7 +132,12 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
             //         "attribute_code" => "marca_del_producto",
             //         "value" => 5569
             //     ],
+            //     [
+            //          "attribute_code => "special_price",
+            //          "value" => "1260.090000"
+            //     ]
             // ]
+           
         ]
     ];
     $data_string = json_encode($data);
