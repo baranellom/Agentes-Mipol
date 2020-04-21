@@ -40,7 +40,9 @@
     INNER  JOIN medida ON medida.medida_id = prd.medida_id
     LEFT JOIN unidad ON unidad.Unidad_id = prd.unidad_id
     WHERE id_gestuc IN 
-    (SELECT DISTINCT prd_id FROM stock_mp s WHERE s.fecha_mov > '2020-04-20 09:00' AND s.dpt_id IN (9,45,46));";
+    (SELECT DISTINCT prd_id FROM stock_mp s WHERE s.dpt_id IN (9,45,46) AND s.fecha_mov > ";
+    
+    #--'2020-04-20 09:00');";
 
 
     class Token  {
