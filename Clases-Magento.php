@@ -15,7 +15,8 @@
     FROM preciovta p1 WHERE p1.prd_id = articulos_magento.id_gestuc ORDER BY p1.preciovta_id DESC LIMIT 1) * 0.81225) AS DECIMAL(13,2))) IS NULL, 0.00,
     CAST(((SELECT cast(((p1.preciovta_mayorista + 100)/100 * p1.costo ) AS Decimal(13,2))
     FROM preciovta p1 WHERE p1.prd_id = articulos_magento.id_gestuc ORDER BY p1.preciovta_id DESC LIMIT 1) * 0.81225) AS DECIMAL(13,2)))  AS 'special_price',
-    (fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc)) AS 'qty'
+    if((fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc))<0, 0, 
+    (fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc))) AS 'qty'
     FROM articulos_magento
     INNER JOIN prd ON prd.prd_id = articulos_magento.id_gestuc
     INNER  JOIN medida ON medida.medida_id = prd.medida_id
@@ -34,7 +35,8 @@
     FROM preciovta p1 WHERE p1.prd_id = articulos_magento.id_gestuc ORDER BY p1.preciovta_id DESC LIMIT 1) * 0.81225) AS DECIMAL(13,2))) IS NULL, 0.00,
     CAST(((SELECT cast(((p1.preciovta_mayorista + 100)/100 * p1.costo ) AS Decimal(13,2))
     FROM preciovta p1 WHERE p1.prd_id = articulos_magento.id_gestuc ORDER BY p1.preciovta_id DESC LIMIT 1) * 0.81225) AS DECIMAL(13,2)))  AS 'special_price',
-    (fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc)) AS 'qty'
+    if((fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc))<0, 0, 
+    (fc_stockmp_PO(articulos_magento.id_gestuc) + fc_stockmp_suc(articulos_magento.id_gestuc,46) + fc_stockmp_GA(articulos_magento.id_gestuc))) AS 'qty'
     FROM articulos_magento
     INNER JOIN prd ON prd.prd_id = articulos_magento.id_gestuc
     INNER  JOIN medida ON medida.medida_id = prd.medida_id

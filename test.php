@@ -16,8 +16,26 @@ $token = curl_exec($curl);
 echo json_decode($token);
 
 //$curl = curl_init($api_url . "/store/websites");
-$curl = curl_init($api_url . "/products/103888-1");
+//$curl = curl_init($api_url . "/products/103888-1");
 //$curl = curl_init($api_url . "/categories");
+$curl = curl_init($api_url . "/products?searchCriteria => [
+    'filterGroups' => [
+      0 => [
+        'filters' => [
+           0 => [
+             'field' => 'name',
+             'value' => '%25GLACELFSUPRAROJO%25',
+             'condition_type' => 'like'
+           ]
+           1 => [
+             'field' => 'name',
+             'value' => '%25ELF%25',
+             'condition_type' => 'like'
+           ]
+        ]
+      ]
+    ]");
+
 
 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

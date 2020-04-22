@@ -64,6 +64,7 @@ $Consulta_stock = $Consulta_stock . "'". $fecha_inicial["fechahora_inicio"]."');
 #-- Obtengo datos con la consulta anterior desde la Base de Datos
 $Articulos_magento = mysqli_query ( $enlace, $Consulta_stock );
 
+#-- Obtengo Cantidad de registros de la consulta anterior para guardar en la tabla
 $Cant_articulos_actualizados = mysqli_affected_rows($enlace);
 
 #-- Inicia una nueva sesión y devuelve el manipulador curl para el uso de las funciones curl_setopt(), curl_exec(), y curl_close().
@@ -99,7 +100,7 @@ endwhile;
 curl_close($chp);
 //curl_close($ch);
 
-$Cierro_ejecucion = mysqli_query ( $enlace, "UPDATE actualizacion_ecommerce SET fechahora_fin=now() WHERE id=".$id_max["id"].";" );
+$Cierro_ejecucion = mysqli_query ( $enlace, "UPDATE actualizacion_ecommerce SET fechahora_fin=now() , reg_afectados=".$Cant_articulos_actualizados." WHERE id=".$id_max["id"].";" );
 echo "Proceso Finalizado. Se actualizaron ".$Cant_articulos_actualizados." - " . date('d/m/Y H:i:s');
 
 /* cerrar la conexion */
