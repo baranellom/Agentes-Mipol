@@ -91,7 +91,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
      
     $response = json_decode($response, TRUE);
     //print_r($response);
-    echo "\r\nStock de Articulo ".$art_magento["sku"]." modificado. - " . date('d/m/Y H:i:s') . "\r\n";
+    echo "\r\nStock del Articulo ".$art_magento["sku"]." modificado. - " . date('d/m/Y H:i:s') . "\r\n";
 
     unset($arti);
         

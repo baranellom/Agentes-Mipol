@@ -24,7 +24,9 @@
     WHERE id_gestuc IN 
     (SELECT pv1.prd_id FROM preciovta AS pv1 
     INNER JOIN (SELECT prd_id, MAX(preciovta_id) AS iden FROM preciovta GROUP BY prd_id) AS pv2 ON pv1.prd_id = pv2.prd_id AND pv1.preciovta_id = pv2.iden 
-    WHERE pv1.preciovta_vigencia > '2020-04-17');";
+    WHERE pv1.preciovta_vigencia > ";
+    
+    //'2020-04-17');";
 
     $Consulta_stock = "SELECT sku, 'simple' as product_type, product_websites,
     if ((CAST((((SELECT cast(((p1.preciovta_mayorista + 100)/100 * p1.costo ) AS Decimal(13,2))
