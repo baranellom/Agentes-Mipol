@@ -67,6 +67,8 @@ $Articulos_magento = mysqli_query ( $enlace, $Consulta_stock );
 #-- Obtengo Cantidad de registros de la consulta anterior para guardar en la tabla
 $Cant_articulos_actualizados = mysqli_affected_rows($enlace);
 
+printf ( "Se actualizarán ".$Cant_articulos_actualizados." Stocks\r\n" );
+
 #-- Inicia una nueva sesión y devuelve el manipulador curl para el uso de las funciones curl_setopt(), curl_exec(), y curl_close().
 $chp = curl_init();
 
