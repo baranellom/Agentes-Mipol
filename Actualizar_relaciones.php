@@ -52,7 +52,7 @@ $headers = array('Content-Type:application/json','Authorization:Bearer '.$clave_
 $apiUrl = $url."/V1/products";
  
 
-$Consulta_inicial = "SELECT * FROM articulos_magento a WHERE a.related_skus != '' AND a.related_position = '1,2,3' limit 1;";
+$Consulta_inicial = "SELECT * FROM articulos_magento a WHERE a.related_skus != '' AND a.related_position = '1,2,3,4,5';";
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
@@ -80,10 +80,14 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
     echo $relaciones[0]; // porción1
     echo $relaciones[1]; // porción2
     echo $relaciones[2]; // porción3
+    echo $relaciones[3]; // porción4
+    echo $relaciones[4]; // porción5
     $posiciones = explode(",", $art_magento["related_position"]);
     echo $posiciones[0]; // porción1
     echo $posiciones[1]; // porción2
     echo $posiciones[2]; // porción3
+    echo $posiciones[3]; // porción4
+    echo $posiciones[4]; // porción5
 
     $data = [
         "product" => [
@@ -120,6 +124,24 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
                     "linked_product_type" => "simple",
                     //"position" => $art_magento["related_position"]
                     "position" => $posiciones[2]
+                ],
+                [
+                    "sku" => $art_magento["sku"],
+                    "link_type" => "related",
+                    //"linked_product_sku" => $art_magento["related_skus"],
+                    "linked_product_sku" => $relaciones[3],
+                    "linked_product_type" => "simple",
+                    //"position" => $art_magento["related_position"]
+                    "position" => $posiciones[3]
+                ],
+                [
+                    "sku" => $art_magento["sku"],
+                    "link_type" => "related",
+                    //"linked_product_sku" => $art_magento["related_skus"],
+                    "linked_product_sku" => $relaciones[4],
+                    "linked_product_type" => "simple",
+                    //"position" => $art_magento["related_position"]
+                    "position" => $posiciones[4]
                 ]
             ]
         ]
