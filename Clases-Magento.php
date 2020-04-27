@@ -3,6 +3,9 @@
     $url = "http://34.82.252.252/index.php/rest";
     $token_url= $url."/V1/integration/admin/token";
     
+    #-- Creo URL de REST API para productos
+    $apiUrl = $url."/V1/products";
+    
     $username= "mbaranello";
     $password= "Carola123";
 
@@ -48,6 +51,9 @@
     
     #--'2020-04-20 09:00');";
 
+    $Consulta_sustitutos = "SELECT sku, id_gestuc, related_skus, related_position FROM articulos_magento WHERE related_skus != '' AND related_position = '1,2' limit 10;";
+    
+    #-- AND related_position = '1,2,3,4,5';";
 
     class Token  {
         #-- Propiedades
@@ -143,6 +149,46 @@
                 ]
             ];
 
+            $this->datos = $data;
+
+            return $this->datos;
+        }
+
+        function cargar_matriz_sustitutos($sku,$rel_skus,$rel_pos){
+            
+            $relaciones = explode(",", $rel_skus);
+            //echo count($relaciones)."\r\n";
+
+            $posiciones = explode(",", $rel_pos);
+            //echo count($posiciones)."\r\n";
+          
+            #-- Blanqueo matriz $rel
+            $rel = array();
+
+            for ($x = 0; $x < count($relaciones); $x++) {
+                $rel[$x] = array("sku"=>$sku, "link_type"=>"related", "linked_product_sku"=>$relaciones[$x], "linked_product_type"=>"simple", "position"=>$posiciones[$x]);
+                //echo $relaciones[$x]."\r\n"; // porción1
+                //echo $posiciones[$x]."\r\n"; // porción1
+            }
+
+            $data = [
+                "product" => [
+                    "sku" => $sku,
+                    //"attribute_set_id" => 4,
+                    //"status" => 1,
+                    //"visibility" => 4,
+                    "type_id" => "simple",
+                    "product_links" => $rel
+                        // [
+                        //     "sku" => $art_magento["sku"],
+                        //     "link_type" => "related",
+                        //     "linked_product_sku" => $relaciones[0],
+                        //     "linked_product_type" => "simple",
+                        //     "position" => $posiciones[0]
+                        // ]            
+                ]
+            ];
+            
             $this->datos = $data;
 
             return $this->datos;

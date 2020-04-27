@@ -13,7 +13,7 @@ echo $clave_token."\r\n";
 $headers = array('Content-Type:application/json','Authorization:Bearer '.$clave_token);
  
 // Creo URL de REST API para productos
-$apiUrl = $url."/V1/products";
+//$apiUrl = $url."/V1/products";
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
