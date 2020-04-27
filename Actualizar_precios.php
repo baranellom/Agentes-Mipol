@@ -76,7 +76,7 @@ $chp = curl_init();
 while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
     $arti = new Articulo();
-    $data = $arti->cargar_matriz_precios_stock($art_magento["sku"],$art_magento["price"],$art_magento["special_price"],$art_magento["qty"]);
+    $data = $arti->cargar_matriz_precios($art_magento["sku"],$art_magento["price"],$art_magento["special_price"]);
 
     //print_r($data);
 
@@ -103,7 +103,7 @@ curl_close($chp);
 //curl_close($ch);
 
 $Cierro_ejecucion = mysqli_query ( $enlace, "UPDATE actualizacion_ecommerce SET fechahora_fin=now() , reg_afectados=".$Cant_articulos_actualizados." WHERE id=".$id_max["id"].";" );
-echo "Proceso Finalizado. Se actualizaron ".$Cant_articulos_actualizados." - " . date('d/m/Y H:i:s');
+echo "Proceso Finalizado. Se actualizaron ".$Cant_articulos_actualizados." Precios - " . date('d/m/Y H:i:s');
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );
