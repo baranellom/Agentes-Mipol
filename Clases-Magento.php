@@ -39,7 +39,7 @@
     
     #--'2020-04-20 09:00');";
 
-    $Consulta_sustitutos = "SELECT sku, id_gestuc, related_skus, related_position FROM articulos_magento WHERE related_skus != '' AND related_position = '1,2' limit 10;";
+    $Consulta_sustitutos = "SELECT sku, id_gestuc, related_skus, related_position FROM articulos_magento WHERE related_skus != '' ;";
     
     #-- AND related_position = '1,2,3,4,5';";
 
