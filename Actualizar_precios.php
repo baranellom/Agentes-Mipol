@@ -86,7 +86,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
     curl_setopt($chp,CURLOPT_URL, $apiUrl);
     curl_setopt($chp, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($chp, CURLOPT_POSTFIELDS, $data_string);
-    curl_setopt($chp, CURLOPT_RETURNTRANSFER, false);
+    curl_setopt($chp, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($chp, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($chp, CURLOPT_HTTPHEADER, $headers);
     $response = curl_exec($chp);

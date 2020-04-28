@@ -64,9 +64,11 @@ $headers = array('Content-Type:application/json','Authorization:Bearer '.$clave_
 #-- Inicia una nueva sesión y devuelve el manipulador curl para el uso de las funciones curl_setopt(), curl_exec(), y curl_close().
 $chp = curl_init();
 
+$i=0;
+
 #-- Con los productos obtenidos chequeo existencia del Archivo en Directorio
 while ($art_magento = mysqli_fetch_array($Articulos_magento)):
-
+    $i++;
     $arti = new Articulo();
     $data = $arti->cargar_matriz_sustitutos($art_magento["sku"],$art_magento["related_skus"],$art_magento["related_position"]);
     
@@ -84,7 +86,7 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
      
     $response = json_decode($response, TRUE);
     //print_r($response);
-    echo "\r\nSustitutos del Articulo ".$art_magento["sku"]." modificado. - " . date('d/m/Y H:i:s') . "\r\n";
+    echo "\r\nSustitutos del Articulo ".$art_magento["sku"]." modificado. - " . date('d/m/Y H:i:s') . " Registro Nº ". $i . "\r\n";
 
     unset($arti);
         
