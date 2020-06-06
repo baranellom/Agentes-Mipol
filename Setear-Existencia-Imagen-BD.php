@@ -10,7 +10,8 @@ $DIRHOME = "D:/FotosMagento/GeneralJPG/";
 #$DIRHOME = "D:/FotosMagento/GeneralJPG";
 
 ##-- Consulta para obtener los productos que se subieron a Magento, para chequear la existencia del arhivo de imagen
-$Consulta_inicial = "SELECT sku, archivoimagen, existeimagen, fecha_up FROM articulos_magento ;";
+//$Consulta_inicial = "SELECT sku, archivoimagen, existeimagen, fecha_up FROM articulos_magento WHERE name LIKE '%BREMEN%';";
+$Consulta_inicial = "SELECT sku, archivoimagen, existeimagen, fecha_up FROM articulos_magento;";
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
@@ -29,6 +30,8 @@ if (mysqli_connect_errno ()) {
 // Obtengo datos con la consulta anterior desde la Base de Datos
 $Articulos_magento = mysqli_query ( $enlace, $Consulta_inicial );
 
+$i = 0;
+
 #-- Con los productos obtenidos chequeo existencia del Archivo en Directorio
 while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
@@ -44,6 +47,8 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 			$Modificar_registro = "UPDATE articulos_magento SET existeimagen='1', fecha_up = now() WHERE sku='".$art_magento['sku']."' LIMIT 1;";
 
 			$Mod_reg = mysqli_query($enlace, $Modificar_registro);
+
+			$i++;
 		} 
 		else 
 		{
@@ -58,7 +63,9 @@ while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
 endwhile;
 
-echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
+echo "Proceso Finalizado. - " . date('d/m/Y H:i:s'). "\n";
+
+echo "Se procesaron " . $i . " imagenes. \n";
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );
