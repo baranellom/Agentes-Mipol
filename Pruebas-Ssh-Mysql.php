@@ -3,7 +3,8 @@
 <?php
 
 //$DIRHOME="/usr/share/Alertas/";
-$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
+//$DIRHOME = "D:/ProyectosVariosMipol/Agentes-Mipol/";
+$DIRHOME = "D:/Proyectos-Programacion/VisualStudioCode/Agentes-Mipol/";
 
 // include ($DIRHOME . "phpmailer/class.phpmailer.php");
 // include_once ($DIRHOME . "agente-pve-stock-plus.php");
@@ -21,9 +22,9 @@ $grupo_dep4 = "2,7";	// Dep Sgo, LB
 $grupo_dep5 = "3,40";   //Dep Jujuy, Salta
 $grupo_dep6 = "8,36";   //Dep Catam, Mendoza
 
-$dbServerHost = "192.168.0.155";
-$username = "mipoldb";
-$password = "mipol123";
+$dbServerHost = "localhost";
+$username = "root";
+$password = "";
 $dbname = "fc";
 
 $resuelto = false;
@@ -37,15 +38,17 @@ $Stock_6 = 0;
 $i = 0;
 
 // Obetngo productos marcados para comprar en los pedidos de Vetntas de las Sucursales
-$Consulta_inicial = "SELECT * FROM actualizacion_ecommerce;";
+$Consulta_inicial = "SELECT * FROM clt;";
 
 //$mail->PluginDir = $DIRHOME . "phpmailer/";
 
 $Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"StockSUC\",\"Fecha Ult Venta\"\r\n";
 
-//shell_exec("C:\plink.exe -ssh 192.168.0.155 -l root -pw 'ingenio' -P 45654 -N -L 3307:127.0.0.1:3306");
+shell_exec("ssh -N -L 43306:127.0.0.1:3306 root@mipolbrs.dyndns.org -p45654");
+//shell_exec("ingenio");
+//shell_exec("C:\plink.exe -ssh root@181.10.176.66 -pw ingenio -P 45654 -N -L 43306:127.0.0.1:3306");
 //c:/plink -fNg -L 3307:$dbServerHost:3306 user@remote_host");
-$enlace = new mysqli($dbServerHost, $username, $password, $dbname, 3307);
+$enlace = new mysqli($dbServerHost, $username, $password, $dbname, 43306);
 
 date_default_timezone_set('America/Argentina/Tucuman');
 
@@ -77,5 +80,7 @@ echo "Informes enviados ";
 
 /* cerrar la conexion */
 mysqli_close ( $enlace );
+
+shell_exec("Ð");
 
 ?>
