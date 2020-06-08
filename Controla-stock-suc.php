@@ -1,12 +1,12 @@
 #!/usr/bin/php
 
 <?php
-    echo "F/H Inicio: " . date('d/m/Y H:i:s');
 
     date_default_timezone_set('America/Argentina/Tucuman');
+    echo "F/H Inicio: " . date('d/m/Y H:i:s');
 
-    $Suc = 10;
-    $Dep = 30;
+    $Suc = 3;
+    $Dep = 3;
 
 	## Consulto los productos que tienen Stock pero no estan dentro de la tabla Stock_mp
     $consultalocal="SELECT prd.prd_id AS prd_id, FC_Stock(prd.prd_id,".$Dep.") AS stock FROM prd LEFT JOIN stock_mp s ON prd.prd_id = s.prd_id AND s.dpt_id = ".$Dep." WHERE s.prd_id IS NULL AND prd.prd_id <> 0 HAVING stock > 0 ;";
