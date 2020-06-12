@@ -34,7 +34,12 @@ $cant_grupos = count($Grupo_deps);
 
 // Consulta para obtener los productos marcados para comprar en los pedidos de Ventas de las Sucursales, 
 // que no tengan un mail enviado y que no haya sido atendido por GA
-$Consulta_inicial = "SELECT * FROM detpve WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail IS NULL;";
+//$Consulta_inicial = "SELECT * FROM detpve WHERE detpve.detpve_atendido = 0 AND detpve.detpve_tipo = 5 AND detpve.dpt_id = 9 AND detpve.detpve_destmail IS NULL;";
+$Consulta_inicial = "SELECT DISTINCT detpve.*
+FROM detpve
+INNER JOIN pve ON detpve.pve_id = pve.pve_id AND detpve.pve_suc = detpve.pve_suc
+LEFT JOIN r_detreservaga_ocmp ON detpve.pve_id=r_detreservaga_ocmp.reservaga_id AND detpve.pve_suc=r_detreservaga_ocmp.reservaga_suc AND detpve.prd_id=r_detreservaga_ocmp.prd_id
+WHERE (r_detreservaga_ocmp.ocmp_id IS NULL) AND (detpve_tipo=5) AND (detpve_atendido=0) AND detpve.dpt_id = 9 AND detpve.detpve_destmail IS NULL ORDER BY detpve.pve_suc;";
 
 $Datos = "\"Prd_id\",\"CodAlfa\",\"Division\",\"Clasificacion\",\"Articulo\",\"StockSUC\",\"Fecha Ult Venta\"\r\n";
 

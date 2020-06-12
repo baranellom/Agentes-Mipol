@@ -5,15 +5,15 @@
     date_default_timezone_set('America/Argentina/Tucuman');
     echo "F/H Inicio: " . date('d/m/Y H:i:s');
 
-    $Suc = 3;
-    $Dep = 3;
+    $Suc = 15;
+    $Dep = 45;
 
 	## Consulto los productos que tienen Stock pero no estan dentro de la tabla Stock_mp
     $consultalocal="SELECT prd.prd_id AS prd_id, FC_Stock(prd.prd_id,".$Dep.") AS stock FROM prd LEFT JOIN stock_mp s ON prd.prd_id = s.prd_id AND s.dpt_id = ".$Dep." WHERE s.prd_id IS NULL AND prd.prd_id <> 0 HAVING stock > 0 ;";
 
 	## Creas una variable de tipo objeto mysqli con los datos de la bd y el charset que quieras
-    //$mysql_loc = mysqli_connect('192.168.0.155', 'root','','fc');
-    $mysql_loc = mysqli_connect('127.0.0.1', 'root','','fc',43306);
+    $mysql_loc = mysqli_connect('192.168.0.155', 'mipoldb','mipol123','fc');
+    //$mysql_loc = mysqli_connect('127.0.0.1', 'root','','fc',43306);
     
     mysqli_query ( $mysql_loc, "SET NAMES 'utf8'");
 
