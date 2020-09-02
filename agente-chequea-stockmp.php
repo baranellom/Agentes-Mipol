@@ -41,7 +41,7 @@ else /*conexion local exitosa*/
         }
         else /*conexion externa exitosa*/
         {
-            $Datos = "\"Prd_id\",\"Stock Suc\",\"Stock GA\",\"Fecha Mov Suc\",\"Fecha Mov GA\",\"Suc\"\n";
+            $Datos = "\"Prd_id\",\"Stock Suc\",\"Stock GA\",\"Fecha Mov Suc\",\"Fecha Mov GA\",\"Suc\",\"Stock_real_local\",\"Stock_real_remoto\",\"Ing_Suc_local\",\"Egr_Suc_local\",\"Ing_Suc_remoto\",\"Egr_Suc_remoto\"\n";
         	$stockmp_file= fopen($DIRHOME.'Stockmp.csv',"w");
 	        fwrite($stockmp_file, $Datos);
             
@@ -86,7 +86,7 @@ else /*conexion local exitosa*/
                         $res_ext_remota = mysqli_fetch_array(mysqli_query($mysql_ext, $consulta_remota_extendida));
 
                         printf("Se encontro una Diferencia de Stock: prd_id = %s, Stock Suc = %s, Stock GA = %s\n", $l['prd_id'] , $l['stock'],  $r['stock']);
-                        $reg = $l['prd_id'].",". $l['stock'] .",". $r['stock'] .",". $l['fecha_mov'] .",". $r['fecha_mov'] .",". $l['suc_id']."\n";
+                        $reg = $l['prd_id'].",". $l['stock'] .",". $r['stock'] .",". $l['fecha_mov'] .",". $r['fecha_mov'] .",". $l['suc_id'] .",". $res_ext_local['mov'] .",". $res_ext_remota['mov'] .",". $res_ext_local['ing'] .",". $res_ext_local['egr'] .",". $res_ext_remota['ing'] .",". $res_ext_remota['egr']."\n";
                         fwrite($stockmp_file, $reg);
                     }
                 }
@@ -102,7 +102,7 @@ else /*conexion local exitosa*/
             fclose($stockmp_file);
             $salida = shell_exec("mail -s 'Envio Archivo diferencias Stock_mp La Banda' -a /usr/local/bin/Stockmp.csv mbaranello@mipolrepuestos.com < cuerpo-mail.txt");
             //echo "$salida";
-            echo " F/H Final: " . date('d/m/Y H:i:s');
+            echo " F/H Final: " . date('d/m/Y H:i:s')."\n";
             exit();
         }
     }
@@ -110,7 +110,7 @@ else /*conexion local exitosa*/
     {
         mysqli_close($mysql_loc);
         echo " Sin Reg. ";
-        echo " F/H Final: " . date('d/m/Y H:i:s');
+        echo " F/H Final: " . date('d/m/Y H:i:s'). "\n";
         exit();
     }
 }
