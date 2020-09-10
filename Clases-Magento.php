@@ -1,13 +1,15 @@
 <?php
 
-    $url = "http://34.82.252.252/index.php/rest";
+    //$url = "http://34.82.252.252/index.php/rest";
+    $url = "http://192.168.0.166/index.php/rest";
     $token_url= $url."/V1/integration/admin/token";
     
     #-- Creo URL de REST API para productos
     $apiUrl = $url."/V1/products";
     
     $username= "mbaranello";
-    $password= "Carola123";
+    //$password= "Carola123";
+    $password= "Juampi123";
 
     $Consulta_precios ="SELECT sku, 'simple' as product_type, product_websites,
     if ((CAST((((SELECT cast(((p1.preciovta_mayorista + 100)/100 * p1.costo ) AS Decimal(13,2))
@@ -40,7 +42,9 @@
     #--'2020-04-20 09:00');";
 
     $Consulta_sustitutos = "SELECT sku, id_gestuc, related_skus, related_position FROM articulos_magento WHERE product_online = 1 AND related_skus != '' AND related_position = '1' limit 3800,500 ;";
-    
+
+    $Consulta_marca_productos = "SELECT DISTINCT mp.marcaproducto_det AS marcap FROM marcaproducto mp ORDER BY mp.marcaproducto_det;";
+
     #-- AND related_position = '1,2,3,4,5';";
 
     class Token  {
@@ -177,5 +181,61 @@
 
     }
 
+    class Categoria {
+
+        #-- Propiedades
+        public $datos;
+        public $id;
+        public $parent_id;
+        public $name;
+        public $is_active;
+        public $position;
+        public $level;
+        public $product_count;
+
+        #-- Metodos
+        function cargar_matriz_categoria($parent_id,$name,$is_active,$position,$level){
+            
+            $data = [
+                "category" => [
+                    "name" => $name,
+                    "parent_id" => $parent_id,
+                    "is_active" => $is_active,
+                    "position" => $position,
+                    "level" => $level
+                ]
+            ];
+
+            $this->datos = $data;
+
+            return $this->datos;
+        }
+    }
+
+    class MarcaProducto {
+
+        #-- Propiedades
+        public $datos;
+        public $label;
+        public $value;
+        public $order;
+        
+        #-- Metodos
+        function cargar_matriz_marca_producto($label,$value,$order){
+            
+            $data = [
+                "option" => [
+                    "label" => $label,
+                    "value" => $value,
+                    "sort_order" => $order
+                ]
+            ];
+
+            $this->datos = $data;
+
+            return $this->datos;
+        }
+    }
 ?>
+
 
