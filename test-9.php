@@ -13,7 +13,7 @@ echo $clave_token."\r\n";
 $headers = array('Content-Type:application/json','Authorization:Bearer '.$clave_token);
  
 // Creo URL de REST API para productos
-$apiUrl = $url."/V1/products/attributes/manufacturer/options";
+$apiUrl = $url."/V1/products/attributes/modelo_vehiculo/options";
 
 echo $apiUrl;
 
@@ -31,23 +31,23 @@ if (mysqli_connect_errno ()) {
 	exit ();
 }
 // Obtengo datos con la consulta anterior desde la Base de Datos
-$Articulos_magento = mysqli_query ( $enlace, $Consulta_marca_productos );
+$Articulos_magento = mysqli_query ( $enlace, $Consulta_modelo_vehiculos );
 
 #-- Inicia una nueva sesión y devuelve el manipulador curl para el uso de las funciones curl_setopt(), curl_exec(), y curl_close().
 $chp = curl_init();
 
 #-- Revisar bien estos valores, para ajustar en fn a los que existen.
 $orden = 1;
-$valor = 4;
+//$valor = 4;
 
 #-- Con los productos obtenidos chequeo existencia del Archivo en Directorio
 while ($art_magento = mysqli_fetch_array($Articulos_magento)):
 
-    $arti = new MarcaProducto();
-    $data = $arti->cargar_matriz_marca_producto($art_magento["marcap"],$valor,$orden);
+    $arti = new ModeloVehiculo();
+    $data = $arti->cargar_matriz_modelo_vehiculo($art_magento["md"],$orden);
 
-    $orden = $orden + 1;
-    $valor = $valor + 1;
+    $orden++ ;
+    //$valor = $valor + 1;
     print_r($data);
 
     $data_string = json_encode($data);
@@ -76,7 +76,6 @@ endwhile;
 //$data = $arti->cargar_matriz_manufacturer("Prueba4","9","6");
 
 curl_close($chp);
-//curl_close($ch);
 
 echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 
@@ -84,3 +83,4 @@ echo "Proceso Finalizado. - " . date('d/m/Y H:i:s');
 mysqli_close ( $enlace );
 
 ?>
+

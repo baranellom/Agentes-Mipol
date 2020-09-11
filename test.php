@@ -19,7 +19,7 @@ echo json_decode($token);
 
 //$curl = curl_init($api_url . "/store/websites");
 //$curl = curl_init($api_url . "/products/103865-3");
-$curl = curl_init($api_url . "/products/attributes/manufacturer/options");
+$curl = curl_init($api_url . "/products/attributes/modelo_vehiculo/options");
 //$curl = curl_init("http://34.82.252.252/rest/V1/products/10?fields=name,sku,status,extension_attributes[category_links,stock_item[item_id,qty]]");
 //$curl = curl_init("http://34.82.252.252/rest/V1/products/?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=2&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[pageSize]=10&fields=items[sku,name,status]");
 

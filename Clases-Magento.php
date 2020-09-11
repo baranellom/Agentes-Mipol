@@ -45,6 +45,10 @@
 
     $Consulta_marca_productos = "SELECT DISTINCT mp.marcaproducto_det AS marcap FROM marcaproducto mp ORDER BY mp.marcaproducto_det;";
 
+    $Consulta_marca_vehiculos = "SELECT DISTINCT marca.marca_det AS mv FROM marca ORDER BY marca.marca_det;";
+
+    $Consulta_modelo_vehiculos = "SELECT DISTINCT modelos.modelo_det AS md  FROM modelos ORDER BY modelos.modelo_det;";
+
     #-- AND related_position = '1,2,3,4,5';";
 
     class Token  {
@@ -227,6 +231,56 @@
                 "option" => [
                     "label" => $label,
                     "value" => $value,
+                    "sort_order" => $order
+                ]
+            ];
+
+            $this->datos = $data;
+
+            return $this->datos;
+        }
+    }
+
+    class MarcaVehiculo {
+
+        #-- Propiedades
+        public $datos;
+        public $label;
+        //public $value;
+        public $order;
+        
+        #-- Metodos
+        function cargar_matriz_marca_vehiculo($label,$order){
+            
+            $data = [
+                "option" => [
+                    "label" => $label,
+                    //"value" => $value,
+                    "sort_order" => $order
+                ]
+            ];
+
+            $this->datos = $data;
+
+            return $this->datos;
+        }
+    }
+
+    class ModeloVehiculo {
+
+        #-- Propiedades
+        public $datos;
+        public $label;
+        //public $value;
+        public $order;
+        
+        #-- Metodos
+        function cargar_matriz_modelo_vehiculo($label,$order){
+            
+            $data = [
+                "option" => [
+                    "label" => $label,
+                    //"value" => $value,
                     "sort_order" => $order
                 ]
             ];
